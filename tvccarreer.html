@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Careers - The Video Company</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#1e5eab',
+                        secondary: '#3a7bd5',
+                        accent: '#00d2ff'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        .job-card {
+            transition: all 0.3s ease;
+            border-left: 4px solid transparent;
+        }
+        
+        .job-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(30, 94, 171, 0.1);
+            border-left: 4px solid #1e5eab;
+        }
+        
+        .benefit-item {
+            transition: all 0.3s ease;
+        }
+        
+        .benefit-item:hover {
+            transform: scale(1.05);
+        }
+        
+        .tab-button {
+            transition: all 0.3s ease;
+        }
+        
+        .tab-button.active {
+            background-color: #1e5eab;
+            color: white;
+        }
+        
+        .application-form input,
+        .application-form textarea,
+        .application-form select {
+            transition: all 0.3s ease;
+            border: 1px solid #e2e8f0;
+        }
+        
+        .application-form input:focus,
+        .application-form textarea:focus,
+        .application-form select:focus {
+            border-color: #1e5eab;
+            box-shadow: 0 0 0 3px rgba(30, 94, 171, 0.2);
+        }
+        
+        /* Popup Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            overflow-y: auto;
+        }
+        
+        .modal-content {
+            background-color: white;
+            margin: 5% auto;
+            width: 80%;
+            max-width: 900px;
+            border-radius: 8px;
+            box-shadow: 0 5px 30px rgba(0, 0, 0, 0.3);
+            animation: modalOpen 0.4s ease;
+        }
+        
+        @keyframes modalOpen {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 24px;
+            color: #777;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+        
+        .close-modal:hover {
+            color: #333;
+        }
+        
+        .job-image {
+            height: 200px;
+            width: 100%;
+            object-fit: cover;
+            border-top-left-radius: 8px;
+        }
+        
+        @media (max-width: 768px) {
+            .modal-content {
+                width: 95%;
+                margin: 10% auto;
+            }
+            
+            .job-details {
+                padding: 15px !important;
+            }
+            
+            .application-form-container {
+                padding: 15px !important;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Hero Section -->
+    <section class="bg-gradient-to-r from-primary to-secondary text-white py-20">
+        <div class="container mx-auto px-4 text-center">
+            <h1 class="text-4xl md:text-5xl font-bold mb-6">Join Our Creative Team</h1>
+            <p class="text-xl max-w-2xl mx-auto mb-8">We're looking for passionate individuals to help us create amazing video content</p>
+            <a href="#open-positions" class="bg-white text-primary px-8 py-3 rounded-md font-medium hover:bg-opacity-90 transition inline-block">View Open Positions</a>
+        </div>
+    </section>
+
+    <!-- Why Join Us -->
+    <section class="py-16 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-gray-800 mb-4">Why Join The Video Company?</h2>
+                <div class="w-20 h-1 bg-primary mx-auto"></div>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="benefit-item bg-gray-50 p-8 rounded-lg text-center">
+                    <div class="w-16 h-16 bg-primary bg-opacity-10 text-primary rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-lightbulb text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3">Creative Freedom</h3>
+                    <p class="text-gray-600">Work on diverse projects with the creative freedom to bring your ideas to life.</p>
+                </div>
+                
+                <div class="benefit-item bg-gray-50 p-8 rounded-lg text-center">
+                    <div class="w-16 h-16 bg-primary bg-opacity-10 text-primary rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-users text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3">Collaborative Team</h3>
+                    <p class="text-gray-600">Join a team of passionate professionals who love what they do.</p>
+                </div>
+                
+                <div class="benefit-item bg-gray-50 p-8 rounded-lg text-center">
+                    <div class="w-16 h-16 bg-primary bg-opacity-10 text-primary rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-chart-line text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3">Growth Opportunities</h3>
+                    <p class="text-gray-600">We invest in our team's growth with training and career development.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Job Openings -->
+    <section id="open-positions" class="py-16 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-gray-800 mb-4">Current Openings</h2>
+                <div class="w-20 h-1 bg-primary mx-auto"></div>
+            </div>
+            
+            <div class="flex justify-center mb-8">
+                <div class="inline-flex rounded-md shadow-sm">
+                    <button class="tab-button px-4 py-2 rounded-l-md border border-gray-300 active" data-category="all">
+                        All Positions
+                    </button>
+                    <button class="tab-button px-4 py-2 border-t border-b border-gray-300" data-category="production">
+                        Production
+                    </button>
+                    <button class="tab-button px-4 py-2 border-t border-b border-gray-300" data-category="post-production">
+                        Post-Production
+                    </button>
+                    <button class="tab-button px-4 py-2 rounded-r-md border border-gray-300" data-category="creative">
+                        Creative
+                    </button>
+                </div>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="jobs-container">
+                <!-- Job 1 -->
+                <div class="job-card bg-white p-6 rounded-lg shadow-sm" data-category="production">
+                    <h3 class="text-xl font-bold text-primary mb-2">Videographer/Cinematographer</h3>
+                    <div class="flex items-center text-gray-500 mb-4">
+                        <span class="mr-4"><i class="fas fa-map-marker-alt mr-1"></i> Bangalore</span>
+                        <span><i class="fas fa-briefcase mr-1"></i> Full-time</span>
+                    </div>
+                    <p class="text-gray-600 mb-4">We're looking for an experienced videographer to join our production team, working on commercial and corporate video projects.</p>
+                    <div class="flex justify-between items-center">
+                        <span class="text-sm text-gray-500">Posted 3 days ago</span>
+                        <button class="text-primary font-medium hover:underline apply-btn" data-job="Videographer/Cinematographer" data-category="production">Apply Now</button>
+                    </div>
+                </div>
+                
+                <!-- Job 2 -->
+                <div class="job-card bg-white p-6 rounded-lg shadow-sm" data-category="post-production">
+                    <h3 class="text-xl font-bold text-primary mb-2">Video Editor</h3>
+                    <div class="flex items-center text-gray-500 mb-4">
+                        <span class="mr-4"><i class="fas fa-map-marker-alt mr-1"></i> Bangalore</span>
+                        <span><i class="fas fa-briefcase mr-1"></i> Full-time</span>
+                    </div>
+                    <p class="text-gray-600 mb-4">Seeking a creative video editor proficient in Premiere Pro and After Effects to craft compelling visual stories.</p>
+                    <div class="flex justify-between items-center">
+                        <span class="text-sm text-gray-500">Posted 1 week ago</span>
+                        <button class="text-primary font-medium hover:underline apply-btn" data-job="Video Editor" data-category="post-production">Apply Now</button>
+                    </div>
+                </div>
+                
+                <!-- Job 3 -->
+                <div class="job-card bg-white p-6 rounded-lg shadow-sm" data-category="creative">
+                    <h3 class="text-xl font-bold text-primary mb-2">Creative Director</h3>
+                    <div class="flex items-center text-gray-500 mb-4">
+                        <span class="mr-4"><i class="fas fa-map-marker-alt mr-1"></i> Bangalore</span>
+                        <span><i class="fas fa-briefcase mr-1"></i> Full-time</span>
+                    </div>
+                    <p class="text-gray-600 mb-4">Lead our creative team in developing innovative concepts for client projects and company initiatives.</p>
+                    <div class="flex justify-between items-center">
+                        <span class="text-sm text-gray-500">Posted 2 weeks ago</span>
+                        <button class="text-primary font-medium hover:underline apply-btn" data-job="Creative Director" data-category="creative">Apply Now</button>
+                    </div>
+                </div>
+                
+                <!-- Job 4 -->
+                <div class="job-card bg-white p-6 rounded-lg shadow-sm" data-category="production">
+                    <h3 class="text-xl font-bold text-primary mb-2">Drone Operator</h3>
+                    <div class="flex items-center text-gray-500 mb-4">
+                        <span class="mr-4"><i class="fas fa-map-marker-alt mr-1"></i> Bangalore</span>
+                        <span><i class="fas fa-briefcase mr-1"></i> Freelance</span>
+                    </div>
+                    <p class="text-gray-600 mb-4">Looking for a certified drone pilot with cinematic experience to capture stunning aerial footage.</p>
+                    <div class="flex justify-between items-center">
+                        <span class="text-sm text-gray-500">Posted 5 days ago</span>
+                        <button class="text-primary font-medium hover:underline apply-btn" data-job="Drone Operator" data-category="production">Apply Now</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Application Modal Popup -->
+    <div id="applicationModal" class="modal">
+        <div class="modal-content relative">
+            <span class="close-modal">&times;</span>
+            <div class="grid grid-cols-1 md:grid-cols-2">
+                <!-- Left Side - Job Details -->
+                <div class="job-details bg-gray-50 p-8">
+                    <img src="https://images.unsplash.com/photo-1573152958734-1922c188fba3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80" alt="Job Cover" class="job-image rounded-t-lg md:rounded-t-none md:rounded-l-lg">
+                    
+                    <h3 id="modalJobTitle" class="text-2xl font-bold text-primary mt-6 mb-4"></h3>
+                    
+                    <div class="job-meta flex items-center text-gray-600 mb-6">
+                        <span class="mr-4"><i class="fas fa-map-marker-alt mr-1"></i> <span id="modalJobLocation">Bangalore</span></span>
+                        <span><i class="fas fa-briefcase mr-1"></i> <span id="modalJobType">Full-time</span></span>
+                    </div>
+                    
+                    <div class="job-description mb-6">
+                        <p id="modalJobDescription" class="text-gray-700 mb-4"></p>
+                    </div>
+                    
+                    <div class="requirements">
+                        <h4 class="text-lg font-semibold mb-3 text-gray-800">Requirements:</h4>
+                        <ul id="modalJobRequirements" class="list-disc pl-5 text-gray-700">
+                            <!-- Will be filled by JavaScript -->
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- Right Side - Application Form -->
+                <div class="application-form-container p-8">
+                    <h3 class="text-2xl font-bold text-gray-800 mb-6">Application Form</h3>
+                    
+                    <form class="application-form space-y-4">
+                        <input type="hidden" id="modalJobPosition" name="job_position">
+                        
+                        <div>
+                            <label for="modalFirstName" class="block text-gray-700 mb-2">First Name *</label>
+                            <input type="text" id="modalFirstName" name="first_name" class="w-full px-4 py-2 rounded-md border" required>
+                        </div>
+                        
+                        <div>
+                            <label for="modalLastName" class="block text-gray-700 mb-2">Last Name *</label>
+                            <input type="text" id="modalLastName" name="last_name" class="w-full px-4 py-2 rounded-md border" required>
+                        </div>
+                        
+                        <div>
+                            <label for="modalEmail" class="block text-gray-700 mb-2">Email *</label>
+                            <input type="email" id="modalEmail" name="email" class="w-full px-4 py-2 rounded-md border" required>
+                        </div>
+                        
+                        <div>
+                            <label for="modalPhone" class="block text-gray-700 mb-2">Phone *</label>
+                            <input type="tel" id="modalPhone" name="phone" class="w-full px-4 py-2 rounded-md border" required>
+                        </div>
+                        
+                        <div>
+                            <label for="modalResume" class="block text-gray-700 mb-2">Resume/CV *</label>
+                            <input type="file" id="modalResume" name="resume" class="w-full px-4 py-2 rounded-md border" accept=".pdf,.doc,.docx" required>
+                            <p class="text-sm text-gray-500 mt-1">PDF, DOC, or DOCX (Max 5MB)</p>
+                        </div>
+                        
+                        <div>
+                            <label for="modalPortfolio" class="block text-gray-700 mb-2">Portfolio/Reel Link</label>
+                            <input type="url" id="modalPortfolio" name="portfolio" class="w-full px-4 py-2 rounded-md border" placeholder="https://">
+                        </div>
+                        
+                        <div>
+                            <label for="modalCoverLetter" class="block text-gray-700 mb-2">Cover Letter</label>
+                            <textarea id="modalCoverLetter" name="cover_letter" rows="4" class="w-full px-4 py-2 rounded-md border"></textarea>
+                        </div>
+                        
+                        <div class="pt-2">
+                            <button type="submit" class="bg-primary text-white px-6 py-3 rounded-md font-medium hover:bg-opacity-90 transition w-full">
+                                Submit Application
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Life at Company -->
+    <section class="py-16 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-gray-800 mb-4">Life at The Video Company</h2>
+                <div class="w-20 h-1 bg-primary mx-auto"></div>
+            </div>
+            
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div class="rounded-lg overflow-hidden h-48">
+                    <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80" alt="Team working" class="w-full h-full object-cover">
+                </div>
+                <div class="rounded-lg overflow-hidden h-48">
+                    <img src="https://images.unsplash.com/photo-1552664730-d307ca884978?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80" alt="Office space" class="w-full h-full object-cover">
+                </div>
+                <div class="rounded-lg overflow-hidden h-48">
+                    <img src="https://images.unsplash.com/photo-1521791136064-7986c2920216?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80" alt="Team event" class="w-full h-full object-cover">
+                </div>
+                <div class="rounded-lg overflow-hidden h-48">
+                    <img src="https://images.unsplash.com/photo-1575505586569-646b2ca898fc?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80" alt="Creative session" class="w-full h-full object-cover">
+                </div>
+            </div>
+        </div>
+    </section>
+
+<!-- Footer -->
+<footer class="footer" id="contact">
+    <div class="container mx-auto px-4">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div class="mb-8 md:mb-0">
+                <h4>About Us</h4>
+                <div>
+                    <img src="./public/WHITE Logo Text PNG.png" alt="" style="width:220px; gap: 20px">
+                </div>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="#"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+            
+            <div class="mb-8 md:mb-0">
+                <h4>Quick Links</h4>
+                <ul class="footer-links">
+                    <li><a href="./index.html">Home</a></li>
+                    <li><a href="./tvcservices.html">Services</a></li>
+                    <li><a href="./tvcgallery_02.html">Portfolio</a></li>
+                    <li><a href="./tvccarreer.html">Careers</a></li>
+                    <li><a href="./contactus.html">Contact Us</a></li>
+                    <li><a href="#">Privacy Policy</a></li>
+                </ul>
+            </div>
+            
+            <div class="mb-8 md:mb-0">
+                <h4>Our Services</h4>
+                <ul class="footer-links">
+                    <li><a href="#">Video Production</a></li>
+                    <li><a href="#">Commercial Filming</a></li>
+                    <li><a href="#">Corporate Videos</a></li>
+                    <li><a href="#">Event Coverage</a></li>
+                    <li><a href="#">Drone Filming</a></li>
+                    <li><a href="#">Post Production</a></li>
+                </ul>
+            </div>
+            
+            <div>
+                <h4>Contact Us</h4>
+                <div class="footer-contact">
+                    <p><i class="fas fa-map-marker-alt"></i> #5/2 NGR Layout, 17th Cross,<br>Bangalore - 560068</p>
+                    <p><i class="fas fa-phone"></i> +91 74116 11528</p>
+                    <p><i class="fas fa-envelope"></i>connect@thevideocompany.in</p>
+                </div>
+                
+                <div class="footer-newsletter mt-4">
+                    <h4>Newsletter</h4>
+                    <p>Subscribe to our newsletter for updates</p>
+                    <form>
+                        <div class="position-relative">
+                            <input type="email" placeholder="Your email address"><button type="submit"><i class="fas fa-paper-plane"></i></button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="footer-bottom w-full">
+        <div class="container mx-auto px-4">
+            <p>&copy; 2023 The Video Company. All Rights Reserved.</p>
+        </div>
+    </div>
+</footer>
+<style>
+    /* Footer Styles */
+        .footer {
+            background: #111827;
+            color: white;
+            padding: 4rem 0 0;
+            position: relative;
+        }
+        
+        .footer h4 {
+            font-size: 1.2rem;
+            margin-bottom: 1.5rem;
+            font-weight: 600;
+            position: relative;
+            padding-bottom: 10px;
+        }
+        
+        .footer h4::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 50px;
+            height: 2px;
+            background: rgba(255, 255, 255, 0.3);
+        }
+        
+        .footer-links {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .footer-links li {
+            margin-bottom: 10px;
+        }
+        
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: block;
+            position: relative;
+            padding-left: 15px;
+        }
+        
+        .footer-links a:before {
+            content: '›';
+            position: absolute;
+            left: 0;
+            top: 0;
+            transition: all 0.3s ease;
+        }
+        
+        .footer-links a:hover {
+            color: white;
+            transform: translateX(5px);
+        }
+        
+        .footer-links a:hover:before {
+            color: white;
+        }
+        
+        .footer-contact p {
+            margin-bottom: 10px;
+            display: flex;
+            align-items: flex-start;
+        }
+        
+        .footer-contact i {
+            margin-right: 10px;
+            color: rgba(255, 255, 255, 0.7);
+            width: 20px;
+            text-align: center;
+            margin-top: 3px;
+        }
+        
+        .social-links {
+            margin-top: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .social-links a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            transition: all 0.3s ease;
+        }
+        
+        .social-links a:hover {
+            background: white;
+            color: #1e5eab;
+            transform: translateY(-3px);
+        }
+        
+        .footer-bottom {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 20px 0;
+            margin-top: 3rem;
+            text-align: center;
+        }
+        
+        .footer-bottom p {
+            margin: 0;
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+        
+        .footer-newsletter {
+            position: relative;
+        }
+        
+        .footer-newsletter input {
+            width: 100%;
+            padding: 10px 15px;
+            border-radius: 30px;
+            border: none;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            outline: none;
+            padding-right: 50px;
+        }
+        
+        .footer-newsletter input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+        
+        .footer-newsletter button {
+            position: absolute;
+            right: 10px;
+            top: 93px;
+            border: none;
+            background: white;
+            color: #1e5eab;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .footer-newsletter button:hover {
+            background: #f0f0f0;
+            transform: scale(1.1);
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .footer {
+                padding: 2rem 0 0;
+            }
+            
+            .footer-logo {
+                text-align: center;
+                margin-bottom: 1.5rem;
+            }
+            
+            .footer h4 {
+                margin-top: 1.5rem;
+            }
+            
+            .social-links {
+                justify-content: center;
+            }
+            
+            .footer-contact p {
+                justify-content: center;
+                text-align: center;
+            }
+            
+            .footer-newsletter {
+                margin-top: 1.5rem;
+            }
+            
+            .dock-container {
+                padding: 6px 10px;
+            }
+            
+            .dock-icon {
+                width: 36px;
+                height: 36px;
+                font-size: 16px;
+            }
+        }
+</style>
+
+    <script>
+        // Job filtering
+        document.querySelectorAll('.tab-button').forEach(button => {
+            button.addEventListener('click', () => {
+                // Update active tab
+                document.querySelectorAll('.tab-button').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                button.classList.add('active');
+                
+                // Filter jobs
+                const category = button.dataset.category;
+                const jobs = document.querySelectorAll('.job-card');
+                
+                jobs.forEach(job => {
+                    if (category === 'all' || job.dataset.category === category) {
+                        job.style.display = 'block';
+                    } else {
+                        job.style.display = 'none';
+                    }
+                });
+            });
+        });
+        
+        // Modal functionality
+        const modal = document.getElementById('applicationModal');
+        const closeBtn = document.querySelector('.close-modal');
+        const applyBtns = document.querySelectorAll('.apply-btn');
+        
+        // Job data for the modal
+        const jobData = {
+            "Videographer/Cinematographer": {
+                location: "Bangalore",
+                type: "Full-time",
+                description: "We're looking for an experienced videographer to join our production team, working on commercial and corporate video projects. You'll be responsible for shooting high-quality video content, working closely with directors and producers to bring creative visions to life.",
+                requirements: [
+                    "3+ years of professional videography experience",
+                    "Proficiency with cinema cameras (RED, ARRI, Blackmagic)",
+                    "Strong understanding of lighting techniques",
+                    "Experience with gimbals and stabilizers",
+                    "Portfolio demonstrating creative and technical skills",
+                    "Ability to work in fast-paced environments"
+                ],
+                image: "https://images.unsplash.com/photo-1573152958734-1922c188fba3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80"
+            },
+            "Video Editor": {
+                location: "Bangalore",
+                type: "Full-time",
+                description: "Seeking a creative video editor proficient in Premiere Pro and After Effects to craft compelling visual stories. You'll work with our post-production team to edit various types of content including commercials, corporate videos, and social media content.",
+                requirements: [
+                    "2+ years of professional video editing experience",
+                    "Expertise in Adobe Premiere Pro and After Effects",
+                    "Strong storytelling and pacing skills",
+                    "Knowledge of color correction and grading",
+                    "Motion graphics skills a plus",
+                    "Ability to meet tight deadlines"
+                ],
+                image: "https://images.unsplash.com/photo-1581094794329-c8112a89af12?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80"
+            },
+            "Creative Director": {
+                location: "Bangalore",
+                type: "Full-time",
+                description: "Lead our creative team in developing innovative concepts for client projects and company initiatives. You'll be responsible for the overall creative vision, ensuring all content aligns with brand strategies and exceeds client expectations.",
+                requirements: [
+                    "5+ years in creative leadership role",
+                    "Strong portfolio of creative campaigns",
+                    "Excellent communication and presentation skills",
+                    "Experience managing creative teams",
+                    "Deep understanding of video production process",
+                    "Ability to think strategically and creatively"
+                ],
+                image: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80"
+            },
+            "Drone Operator": {
+                location: "Bangalore",
+                type: "Freelance",
+                description: "Looking for a certified drone pilot with cinematic experience to capture stunning aerial footage. You'll work on various projects including commercials, real estate videos, and event coverage.",
+                requirements: [
+                    "DGCA drone pilot certification",
+                    "2+ years of professional drone operation",
+                    "Experience with cinematic drone movements",
+                    "Own professional-grade drone equipment",
+                    "Knowledge of aerial photography principles",
+                    "Flexible schedule for project-based work"
+                ],
+                image: "https://images.unsplash.com/photo-1518621736915-f3b1c41bfd00?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80"
+            }
+        };
+        
+        // Apply button functionality
+        applyBtns.forEach(button => {
+            button.addEventListener('click', () => {
+                const jobTitle = button.dataset.job;
+                const jobInfo = jobData[jobTitle];
+                
+                // Update modal content
+                document.getElementById('modalJobTitle').textContent = jobTitle;
+                document.getElementById('modalJobLocation').textContent = jobInfo.location;
+                document.getElementById('modalJobType').textContent = jobInfo.type;
+                document.getElementById('modalJobDescription').textContent = jobInfo.description;
+                document.getElementById('modalJobPosition').value = jobTitle;
+                
+                // Update requirements list
+                const requirementsList = document.getElementById('modalJobRequirements');
+                requirementsList.innerHTML = '';
+                jobInfo.requirements.forEach(req => {
+                    const li = document.createElement('li');
+                    li.textContent = req;
+                    requirementsList.appendChild(li);
+                });
+                
+                // Update job image
+                const jobImage = document.querySelector('.job-image');
+                jobImage.src = jobInfo.image;
+                jobImage.alt = jobTitle;
+                
+                // Show modal
+                modal.style.display = 'block';
+                document.body.style.overflow = 'hidden';
+            });
+        });
+        
+        // Close modal
+        closeBtn.addEventListener('click', () => {
+            modal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        });
+        
+        // Close when clicking outside modal
+        window.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                modal.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            }
+        });
+        
+        // Form submission
+        document.querySelector('.application-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            alert('Thank you for your application! We will review your information and get back to you soon.');
+            modal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+            e.target.reset();
+        });
+    </script>
+</body>
+</html>

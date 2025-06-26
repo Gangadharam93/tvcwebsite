@@ -1,0 +1,279 @@
+<!-- Include dock styles -->
+<link rel="stylesheet" href="dock.css">
+
+<!-- Include dock HTML (or use PHP include) -->
+<!--#include file="dock.html" -->
+
+<!-- Include dock JavaScript -->
+<script src="dock.js"></script>
+
+<!-- Minimal Mac-style Dock Navigation -->
+<div class="dock-container">
+    <a href="./index.html" class="dock-item active" data-section="welcome">
+        <div class="dock-label">Home</div>
+        <div class="dock-icon">
+            <i class="fas fa-home"></i>
+        </div>
+    </a>
+    <a href="./tvcabout.html" class="dock-item" data-section="about">
+        <div class="dock-label">About</div>
+        <div class="dock-icon">
+            <i class="fas fa-user"></i>
+        </div>
+    </a>
+    <a href="./tvcservices.html" class="dock-item" data-section="services">
+        <div class="dock-label">Services</div>
+        <div class="dock-icon">
+            <i class="fas fa-cogs"></i>
+        </div>
+    </a>
+    <a href="./tvcgallery_02.html" class="dock-item" data-section="gallery">
+        <div class="dock-label">Gallery</div>
+        <div class="dock-icon">
+            <i class="fas fa-images"></i>
+        </div>
+    </a>
+    <a href="#clients" class="dock-item" data-section="clients">
+        <div class="dock-label">Clients</div>
+        <div class="dock-icon">
+            <i class="fas fa-handshake"></i>
+        </div>
+    </a>
+    <a href="#contact" class="dock-item" data-section="contact">
+        <div class="dock-label">Contact</div>
+        <div class="dock-icon">
+            <i class="fas fa-envelope"></i>
+        </div>
+    </a>
+</div>
+
+
+
+
+<style>
+/* Minimal Mac-style Dock */
+.dock-container {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 8px 15px;
+    background: rgba(255, 255, 255, 0.85);
+    border-radius: 16px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    transition: all 0.3s ease;
+}
+
+/* Hide dock animation */
+.dock-hidden {
+    transform: translate(-50%, 100px);
+    opacity: 0;
+}
+
+.dock-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 8px;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.dock-icon {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #1e5eab;
+    color: white;
+    border-radius: 10px;
+    font-size: 18px;
+    box-shadow: 0 2px 8px rgba(30, 94, 171, 0.3);
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.dock-item:hover .dock-icon {
+    transform: translateY(-5px);
+}
+
+.dock-item:hover .dock-label {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.dock-label {
+    position: absolute;
+    top: -30px;
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 3px 10px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 500;
+    opacity: 0;
+    transform: translateY(5px);
+    transition: all 0.2s ease;
+    white-space: nowrap;
+}
+
+/* Active state */
+.dock-item.active .dock-icon {
+    background: #174a87;
+    transform: translateY(-5px);
+}
+
+/* Mobile Responsive Styles */
+@media (max-width: 767.98px) {
+    .dock-container {
+        bottom: 10px;
+        padding: 5px 10px;
+    }
+    
+    .dock-icon {
+        width: 32px;
+        height: 32px;
+        font-size: 14px;
+    }
+    
+    .dock-label {
+        font-size: 9px;
+        top: -25px;
+    }
+}
+
+/* Tablet Styles */
+@media (min-width: 768px) and (max-width: 991.98px) {
+    .dock-icon {
+        width: 36px;
+        height: 36px;
+        font-size: 16px;
+    }
+}
+
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Get dock container and items
+    const dockContainer = document.querySelector('.dock-container');
+    const dockItems = document.querySelectorAll('.dock-item');
+    
+    // Scroll-based dock visibility
+    let lastScrollTop = 0;
+    const scrollThreshold = 10; // Minimum scroll amount to trigger hide/show
+    
+    window.addEventListener('scroll', function() {
+        const currentScrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        
+        // Check if we've scrolled more than the threshold
+        if (Math.abs(lastScrollTop - currentScrollTop) <= scrollThreshold) {
+            return;
+        }
+        
+        // Scrolling down
+        if (currentScrollTop > lastScrollTop) {
+            dockContainer.classList.add('dock-hidden');
+        } 
+        // Scrolling up
+        else {
+            dockContainer.classList.remove('dock-hidden');
+        }
+        
+        lastScrollTop = currentScrollTop;
+    });
+    
+    // Show dock when mouse moves to bottom of screen
+    document.addEventListener('mousemove', function(e) {
+        const windowHeight = window.innerHeight;
+        const bottomThreshold = windowHeight - 100;
+        
+        if (e.clientY > bottomThreshold) {
+            dockContainer.classList.remove('dock-hidden');
+        }
+    });
+    
+    // Dock navigation functionality
+    dockItems.forEach(item => {
+        // Hover effects
+        item.addEventListener('mouseenter', function() {
+            this.querySelector('.dock-icon').style.transform = 'translateY(-5px)';
+        });
+        
+        item.addEventListener('mouseleave', function() {
+            if (!this.classList.contains('active')) {
+                this.querySelector('.dock-icon').style.transform = 'translateY(0)';
+            }
+        });
+        
+        // Click functionality
+        item.addEventListener('click', function(e) {
+            // Prevent default if it's a regular link
+            if (this.tagName === 'A' && this.getAttribute('href').startsWith('#')) {
+                e.preventDefault();
+            }
+            
+            // Update active state
+            dockItems.forEach(dockItem => dockItem.classList.remove('active'));
+            this.classList.add('active');
+            
+            // Get section to scroll to
+            const targetSection = this.dataset.section;
+            const targetElement = document.getElementById(targetSection);
+            
+            // Scroll to section if it exists
+            if (targetElement) {
+                window.scrollTo({
+                    top: targetElement.offsetTop,
+                    behavior: 'smooth'
+                });
+            }
+        });
+    });
+    
+    // Update active dock item based on scroll position
+    window.addEventListener('scroll', function() {
+        const scrollDistance = window.pageYOffset || document.documentElement.scrollTop;
+        const sections = document.querySelectorAll('section, div[id]');
+        
+        sections.forEach(section => {
+            const sectionTop = section.offsetTop;
+            const sectionHeight = section.offsetHeight;
+            
+            if (scrollDistance >= sectionTop - 100 && 
+                scrollDistance < sectionTop + sectionHeight - 100) {
+                const sectionId = section.id;
+                const correspondingDockItem = document.querySelector(`.dock-item[data-section="${sectionId}"]`);
+                
+                if (correspondingDockItem) {
+                    dockItems.forEach(item => item.classList.remove('active'));
+                    correspondingDockItem.classList.add('active');
+                }
+            }
+        });
+    });
+    
+    // Service button hover effect (if needed)
+    const serviceButtons = document.querySelectorAll('.service-btn');
+    serviceButtons.forEach(button => {
+        button.addEventListener('mouseenter', function() {
+            const icon = this.querySelector('i');
+            icon.classList.add('fa-bounce');
+        });
+        
+        button.addEventListener('mouseleave', function() {
+            const icon = this.querySelector('i');
+            icon.classList.remove('fa-bounce');
+        });
+    });
+});
+
+</script>

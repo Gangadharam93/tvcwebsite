@@ -1,0 +1,1288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Professional Portfolio Gallery</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#1E5EAB',
+                        secondary: '#0D2E54',
+                        light: '#F0F7FF',
+                    }
+                },
+                fontFamily: {
+                    sans: ['Montserrat', 'sans-serif'],
+                    serif: ['Merriweather', 'serif'],
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Merriweather:wght@300;400;700&display=swap');
+        
+        body {
+            font-family: 'Montserrat', sans-serif;
+        }
+        
+        .gallery-item {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .gallery-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+        
+        .modal {
+            transition: opacity 0.3s ease;
+        }
+        
+        .video-container {
+            position: relative;
+            padding-bottom: 56.25%;
+            height: 0;
+            overflow: hidden;
+        }
+        
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        
+        .client-logo {
+            filter: grayscale(100%);
+            transition: all 0.3s ease;
+        }
+        
+        .client-logo:hover {
+            filter: grayscale(0%);
+        }
+        
+        .section-divider {
+            height: 4px;
+            background: linear-gradient(90deg, rgba(30,94,171,0) 0%, rgba(30,94,171,1) 50%, rgba(30,94,171,0) 100%);
+            margin: 3rem auto;
+            width: 80%;
+        }
+        
+        .tab-active {
+            background-color: #1E5EAB;
+            color: white;
+        }
+        
+        .testimonial-slide {
+            transition: all 0.5s ease;
+            opacity: 0;
+            height: 0;
+            overflow: hidden;
+        }
+        
+        .testimonial-slide.active {
+            opacity: 1;
+            height: auto;
+        }
+        
+        /* Minimal Mac-style Dock */
+        .dock-container {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 8px 15px;
+            background: rgba(255, 255, 255, 0.85);
+            border-radius: 16px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            transition: all 0.3s ease;
+        }
+        
+        /* Hide dock animation */
+        .dock-hidden {
+            transform: translate(-50%, 100px);
+            opacity: 0;
+        }
+        
+        .dock-item {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 8px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .dock-icon {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #1e5eab;
+            color: white;
+            border-radius: 10px;
+            font-size: 18px;
+            box-shadow: 0 2px 8px rgba(30, 94, 171, 0.3);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .dock-item:hover .dock-icon {
+            transform: translateY(-5px);
+        }
+        
+        .dock-item:hover .dock-label {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .dock-label {
+            position: absolute;
+            top: -30px;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 500;
+            opacity: 0;
+            transform: translateY(5px);
+            transition: all 0.2s ease;
+            white-space: nowrap;
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .dock-container {
+                width: 90%;
+                overflow-x: auto;
+                padding: 8px 5px;
+                justify-content: flex-start;
+            }
+            
+            .dock-item {
+                margin: 0 4px;
+                flex-shrink: 0;
+            }
+            
+            .section-divider {
+                width: 90%;
+            }
+            
+            .testimonial-slide .flex {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .testimonial-slide .w-16 {
+                margin-right: 0;
+                margin-bottom: 1rem;
+            }
+            
+            .testimonial-prev, .testimonial-next {
+                top: auto;
+                bottom: -50px;
+            }
+            
+            .testimonial-prev {
+                left: 30%;
+            }
+            
+            .testimonial-next {
+                right: 30%;
+            }
+        }
+        
+        @media (max-width: 640px) {
+            .hero-buttons {
+                flex-direction: column;
+            }
+            
+            .hero-buttons button {
+                width: 100%;
+                margin-right: 0;
+                margin-bottom: 1rem;
+            }
+            
+            .filter-tabs {
+                flex-wrap: wrap;
+            }
+            
+            .filter-btn {
+                margin: 0.25rem;
+                padding: 0.5rem 1rem;
+                font-size: 0.875rem;
+            }
+            
+            .client-logos {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Hero Section -->
+    <section class="bg-gradient-to-b from-primary to-secondary text-white py-20">
+        <div class="container mx-auto px-4 text-center">
+            <h1 class="text-4xl md:text-5xl font-bold mb-6">Showcasing Our Best Work</h1>
+            <p class="text-xl max-w-3xl mx-auto mb-10">We create stunning visual experiences for brands that want to make an impact.</p>
+            <div class="flex flex-wrap justify-center hero-buttons">
+                <button id="explore-btn" class="bg-white text-primary px-8 py-3 rounded-md font-semibold text-lg hover:bg-gray-100 transition mr-4">Explore Gallery</button>
+                <button class="border-2 border-white text-white px-8 py-3 rounded-md font-semibold text-lg hover:bg-white hover:text-primary transition">Get in Touch</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 1: Portfolio Gallery -->
+    <section id="portfolio" class="py-16 bg-light">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-2 text-gray-800">Our Portfolio</h2>
+            <p class="text-center text-gray-600 mb-12 max-w-2xl mx-auto">Browse through our collection of professional videos, photography, and design work</p>
+            
+            <!-- Filter Tabs -->
+            <div class="flex flex-wrap justify-center mb-10 filter-tabs">
+                <button class="filter-btn tab-active m-1 px-6 py-2 rounded-full text-sm font-medium" data-filter="all">All Work</button>
+                <button class="filter-btn m-1 px-6 py-2 rounded-full bg-gray-200 text-gray-700 hover:bg-gray-300 text-sm font-medium" data-filter="video">Videos</button>
+                <button class="filter-btn m-1 px-6 py-2 rounded-full bg-gray-200 text-gray-700 hover:bg-gray-300 text-sm font-medium" data-filter="photo">Photography</button>
+                <button class="filter-btn m-1 px-6 py-2 rounded-full bg-gray-200 text-gray-700 hover:bg-gray-300 text-sm font-medium" data-filter="youtube">YouTube</button>
+            </div>
+            
+            <!-- Gallery Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Video Item 1 -->
+                <div class="gallery-item rounded-lg overflow-hidden shadow-md bg-white" data-category="video" data-id="1">
+                    <div class="relative">
+                        <div class="aspect-w-16 aspect-h-9 bg-gray-200">
+                            <svg class="w-full h-full text-gray-300" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                            </svg>
+                        </div>
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <div class="bg-primary text-white rounded-full w-14 h-14 flex items-center justify-center">
+                                <i class="fas fa-play text-xl"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-semibold mb-2">Corporate Brand Video</h3>
+                        <p class="text-gray-600 mb-4">A dynamic brand video for TechCorp showcasing their innovative solutions.</p>
+                        <div class="flex items-center">
+                            <div class="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center text-white font-bold">T</div>
+                            <span class="ml-2 text-sm text-gray-500">TechCorp Inc.</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Photo Item 1 -->
+                <div class="gallery-item rounded-lg overflow-hidden shadow-md bg-white" data-category="photo" data-id="2">
+                    <div class="relative">
+                        <svg class="w-full h-64 text-gray-200 bg-gray-100" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
+                            <rect width="100" height="100" fill="#f3f4f6"></rect>
+                            <path d="M30,50 Q50,30 70,50 T100,50 V100 H0 V50 Z" fill="#e5e7eb"></path>
+                            <circle cx="70" cy="30" r="10" fill="#d1d5db"></circle>
+                        </svg>
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <div class="bg-primary text-white rounded-full w-14 h-14 flex items-center justify-center">
+                                <i class="fas fa-search text-xl"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-semibold mb-2">Product Photography</h3>
+                        <p class="text-gray-600 mb-4">Professional product photography for LuxBrand's new collection.</p>
+                        <div class="flex items-center">
+                            <div class="w-8 h-8 rounded-full bg-purple-500 flex items-center justify-center text-white font-bold">L</div>
+                            <span class="ml-2 text-sm text-gray-500">LuxBrand</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- YouTube Item 1 -->
+                <div class="gallery-item rounded-lg overflow-hidden shadow-md bg-white" data-category="youtube" data-id="3">
+                    <div class="relative">
+                        <div class="aspect-w-16 aspect-h-9 bg-gray-200">
+                            <svg class="w-full h-full text-gray-300" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                            </svg>
+                        </div>
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <div class="bg-red-600 text-white rounded-full w-14 h-14 flex items-center justify-center">
+                                <i class="fab fa-youtube text-xl"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-semibold mb-2">YouTube Campaign</h3>
+                        <p class="text-gray-600 mb-4">Viral YouTube campaign for EcoFriendly's sustainable products.</p>
+                        <div class="flex items-center">
+                            <div class="w-8 h-8 rounded-full bg-green-500 flex items-center justify-center text-white font-bold">E</div>
+                            <span class="ml-2 text-sm text-gray-500">EcoFriendly</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Video Item 2 -->
+                <div class="gallery-item rounded-lg overflow-hidden shadow-md bg-white" data-category="video" data-id="4">
+                    <div class="relative">
+                        <div class="aspect-w-16 aspect-h-9 bg-gray-200">
+                            <svg class="w-full h-full text-gray-300" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                            </svg>
+                        </div>
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <div class="bg-primary text-white rounded-full w-14 h-14 flex items-center justify-center">
+                                <i class="fas fa-play text-xl"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-semibold mb-2">Event Highlight Reel</h3>
+                        <p class="text-gray-600 mb-4">Capturing the excitement of GlobalConf 2023 annual conference.</p>
+                        <div class="flex items-center">
+                            <div class="w-8 h-8 rounded-full bg-orange-500 flex items-center justify-center text-white font-bold">G</div>
+                            <span class="ml-2 text-sm text-gray-500">GlobalConf</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Photo Item 2 -->
+                <div class="gallery-item rounded-lg overflow-hidden shadow-md bg-white" data-category="photo" data-id="5">
+                    <div class="relative">
+                        <svg class="w-full h-64 text-gray-200 bg-gray-100" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
+                            <rect width="100" height="100" fill="#f3f4f6"></rect>
+                            <circle cx="30" cy="30" r="20" fill="#e5e7eb"></circle>
+                            <rect x="60" y="20" width="30" height="60" fill="#d1d5db"></rect>
+                        </svg>
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <div class="bg-primary text-white rounded-full w-14 h-14 flex items-center justify-center">
+                                <i class="fas fa-search text-xl"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-semibold mb-2">Architectural Photography</h3>
+                        <p class="text-gray-600 mb-4">Stunning architectural shots for UrbanDesign's latest project.</p>
+                        <div class="flex items-center">
+                            <div class="w-8 h-8 rounded-full bg-gray-700 flex items-center justify-center text-white font-bold">U</div>
+                            <span class="ml-2 text-sm text-gray-500">UrbanDesign</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- YouTube Item 2 -->
+                <div class="gallery-item rounded-lg overflow-hidden shadow-md bg-white" data-category="youtube" data-id="6">
+                    <div class="relative">
+                        <div class="aspect-w-16 aspect-h-9 bg-gray-200">
+                            <svg class="w-full h-full text-gray-300" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                            </svg>
+                        </div>
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <div class="bg-red-600 text-white rounded-full w-14 h-14 flex items-center justify-center">
+                                <i class="fab fa-youtube text-xl"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-semibold mb-2">Product Tutorial Series</h3>
+                        <p class="text-gray-600 mb-4">Educational YouTube series for FitLife's fitness equipment.</p>
+                        <div class="flex items-center">
+                            <div class="w-8 h-8 rounded-full bg-pink-500 flex items-center justify-center text-white font-bold">F</div>
+                            <span class="ml-2 text-sm text-gray-500">FitLife</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Video Item 3 (New) -->
+                <div class="gallery-item rounded-lg overflow-hidden shadow-md bg-white" data-category="video" data-id="7">
+                    <div class="relative">
+                        <div class="aspect-w-16 aspect-h-9 bg-gray-200">
+                            <svg class="w-full h-full text-gray-300" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                            </svg>
+                        </div>
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <div class="bg-primary text-white rounded-full w-14 h-14 flex items-center justify-center">
+                                <i class="fas fa-play text-xl"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-semibold mb-2">Commercial Advertisement</h3>
+                        <p class="text-gray-600 mb-4">High-impact TV commercial for SkyBlue Airlines' new service.</p>
+                        <div class="flex items-center">
+                            <div class="w-8 h-8 rounded-full bg-blue-400 flex items-center justify-center text-white font-bold">S</div>
+                            <span class="ml-2 text-sm text-gray-500">SkyBlue Airlines</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Photo Item 3 (New) -->
+                <div class="gallery-item rounded-lg overflow-hidden shadow-md bg-white" data-category="photo" data-id="8">
+                    <div class="relative">
+                        <svg class="w-full h-64 text-gray-200 bg-gray-100" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
+                            <rect width="100" height="100" fill="#f3f4f6"></rect>
+                            <path d="M0,70 C20,60 50,80 70,50 S100,30 100,50 V100 H0 Z" fill="#e5e7eb"></path>
+                            <circle cx="80" cy="20" r="15" fill="#d1d5db"></circle>
+                        </svg>
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <div class="bg-primary text-white rounded-full w-14 h-14 flex items-center justify-center">
+                                <i class="fas fa-search text-xl"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-semibold mb-2">Fashion Lookbook</h3>
+                        <p class="text-gray-600 mb-4">Seasonal fashion photography for StyleHouse's summer collection.</p>
+                        <div class="flex items-center">
+                            <div class="w-8 h-8 rounded-full bg-yellow-500 flex items-center justify-center text-white font-bold">S</div>
+                            <span class="ml-2 text-sm text-gray-500">StyleHouse</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- YouTube Item 3 (New) -->
+                <div class="gallery-item rounded-lg overflow-hidden shadow-md bg-white" data-category="youtube" data-id="9">
+                    <div class="relative">
+                        <div class="aspect-w-16 aspect-h-9 bg-gray-200">
+                            <svg class="w-full h-full text-gray-300" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                            </svg>
+                        </div>
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <div class="bg-red-600 text-white rounded-full w-14 h-14 flex items-center justify-center">
+                                <i class="fab fa-youtube text-xl"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-semibold mb-2">Cooking Channel</h3>
+                        <p class="text-gray-600 mb-4">Recipe video series for ChefMaster's YouTube cooking channel.</p>
+                        <div class="flex items-center">
+                            <div class="w-8 h-8 rounded-full bg-red-500 flex items-center justify-center text-white font-bold">C</div>
+                            <span class="ml-2 text-sm text-gray-500">ChefMaster</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="text-center mt-12">
+                <button class="bg-primary text-white px-8 py-3 rounded-md font-semibold hover:bg-secondary transition">Load More Projects</button>
+            </div>
+        </div>
+    </section>
+
+    <div class="section-divider"></div>
+
+    <!-- Section 2: Client Showcase -->
+    <section id="clients" class="py-16 bg-white">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-2 text-gray-800">Our Clients</h2>
+            <p class="text-center text-gray-600 mb-12 max-w-2xl mx-auto">We've had the pleasure of working with amazing brands from around the world</p>
+            
+            <!-- Client Logos -->
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8 mb-16 client-logos">
+                <div class="flex items-center justify-center p-4">
+                    <div class="client-logo w-24 h-24 flex items-center justify-center">
+                        <svg class="w-full h-full" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <rect width="100" height="100" rx="10" fill="#1E5EAB"/>
+                            <path d="M30 30H70V70H30V30Z" stroke="white" stroke-width="4"/>
+                            <circle cx="50" cy="50" r="15" stroke="white" stroke-width="4"/>
+                        </svg>
+                    </div>
+                </div>
+                <div class="flex items-center justify-center p-4">
+                    <div class="client-logo w-24 h-24 flex items-center justify-center">
+                        <svg class="w-full h-full" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="50" cy="50" r="45" fill="#FF6B35"/>
+                            <path d="M30 50L45 65L70 35" stroke="white" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                </div>
+                <div class="flex items-center justify-center p-4">
+                    <div class="client-logo w-24 h-24 flex items-center justify-center">
+                        <svg class="w-full h-full" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M20 20H80V80H20V20Z" fill="#4CAF50"/>
+                            <path d="M35 50H65M50 35V65" stroke="white" stroke-width="6" stroke-linecap="round"/>
+                        </svg>
+                    </div>
+                </div>
+                <div class="flex items-center justify-center p-4">
+                    <div class="client-logo w-24 h-24 flex items-center justify-center">
+                        <svg class="w-full h-full" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M50 15L85 85H15L50 15Z" fill="#9C27B0"/>
+                            <circle cx="50" cy="60" r="10" fill="white"/>
+                        </svg>
+                    </div>
+                </div>
+                <div class="flex items-center justify-center p-4">
+                    <div class="client-logo w-24 h-24 flex items-center justify-center">
+                        <svg class="w-full h-full" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="50" cy="50" r="45" fill="#607D8B"/>
+                            <path d="M30 40H70V60H30V40Z" fill="white"/>
+                        </svg>
+                    </div>
+                </div>
+                <div class="flex items-center justify-center p-4">
+                    <div class="client-logo w-24 h-24 flex items-center justify-center">
+                        <svg class="w-full h-full" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <rect width="100" height="100" rx="50" fill="#FFC107"/>
+                            <path d="M35 35H65V65H35V35Z" stroke="white" stroke-width="4"/>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Featured Client Case Studies -->
+            <h3 class="text-2xl font-semibold text-center mb-10">Featured Client Work</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="bg-gray-50 rounded-lg overflow-hidden shadow-md">
+                    <div class="p-6">
+                        <div class="w-16 h-16 mb-4 mx-auto">
+                            <svg class="w-full h-full" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <rect width="100" height="100" rx="10" fill="#1E5EAB"/>
+                                <path d="M30 30H70V70H30V30Z" stroke="white" stroke-width="4"/>
+                                <circle cx="50" cy="50" r="15" stroke="white" stroke-width="4"/>
+                            </svg>
+                        </div>
+                        <h4 class="text-xl font-semibold mb-2 text-center">TechCorp Inc.</h4>
+                        <p class="text-gray-600 mb-4 text-center">Brand Video Campaign</p>
+                        <ul class="space-y-2 mb-6">
+                            <li class="flex items-center">
+                                <svg class="w-5 h-5 mr-2 text-primary" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                                </svg>
+                                <span>300% increase in brand awareness</span>
+                            </li>
+                            <li class="flex items-center">
+                                <svg class="w-5 h-5 mr-2 text-primary" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                                </svg>
+                                <span>1.2M video views across platforms</span>
+                            </li>
+                            <li class="flex items-center">
+                                <svg class="w-5 h-5 mr-2 text-primary" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                                </svg>
+                                <span>25% conversion rate improvement</span>
+                            </li>
+                        </ul>
+                        <div class="text-center">
+                            <button class="view-case-study text-primary font-medium hover:text-secondary transition" data-id="1">View Case Study →</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-gray-50 rounded-lg overflow-hidden shadow-md">
+                    <div class="p-6">
+                        <div class="w-16 h-16 mb-4 mx-auto">
+                            <svg class="w-full h-full" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="50" cy="50" r="45" fill="#FF6B35"/>
+                                <path d="M30 50L45 65L70 35" stroke="white" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                        <h4 class="text-xl font-semibold mb-2 text-center">LuxBrand</h4>
+                        <p class="text-gray-600 mb-4 text-center">Product Photography</p>
+                        <ul class="space-y-2 mb-6">
+                            <li class="flex items-center">
+                                <svg class="w-5 h-5 mr-2 text-primary" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                                </svg>
+                                <span>45% increase in online sales</span>
+                            </li>
+                            <li class="flex items-center">
+                                <svg class="w-5 h-5 mr-2 text-primary" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                                </svg>
+                                <span>Featured in 3 major publications</span>
+                            </li>
+                            <li class="flex items-center">
+                                <svg class="w-5 h-5 mr-2 text-primary" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                                </svg>
+                                <span>Social media engagement up 78%</span>
+                            </li>
+                        </ul>
+                        <div class="text-center">
+                            <button class="view-case-study text-primary font-medium hover:text-secondary transition" data-id="2">View Case Study →</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-gray-50 rounded-lg overflow-hidden shadow-md">
+                    <div class="p-6">
+                        <div class="w-16 h-16 mb-4 mx-auto">
+                            <svg class="w-full h-full" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M20 20H80V80H20V20Z" fill="#4CAF50"/>
+                                <path d="M35 50H65M50 35V65" stroke="white" stroke-width="6" stroke-linecap="round"/>
+                            </svg>
+                        </div>
+                        <h4 class="text-xl font-semibold mb-2 text-center">EcoFriendly</h4>
+                        <p class="text-gray-600 mb-4 text-center">YouTube Campaign</p>
+                        <ul class="space-y-2 mb-6">
+                            <li class="flex items-center">
+                                <svg class="w-5 h-5 mr-2 text-primary" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                                </svg>
+                                <span>5.7M views on YouTube</span>
+                            </li>
+                            <li class="flex items-center">
+                                <svg class="w-5 h-5 mr-2 text-primary" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                                </svg>
+                                <span>120K new subscribers</span>
+                            </li>
+                            <li class="flex items-center">
+                                <svg class="w-5 h-5 mr-2 text-primary" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                                </svg>
+                                <span>200% ROI on campaign investment</span>
+                            </li>
+                        </ul>
+                        <div class="text-center">
+                            <button class="view-case-study text-primary font-medium hover:text-secondary transition" data-id="3">View Case Study →</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="section-divider"></div>
+
+    <!-- Section 3: Testimonials -->
+    <section id="testimonials" class="py-16 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-2 text-gray-800">Client Testimonials</h2>
+            <p class="text-center text-gray-600 mb-12 max-w-2xl mx-auto">Hear what our clients have to say about working with us</p>
+            
+            <div class="relative">
+                <!-- Testimonial Slider -->
+                <div class="testimonial-slider">
+                    <!-- Testimonial 1 -->
+                    <div class="testimonial-slide active">
+                        <div class="bg-white rounded-lg shadow-md p-8 max-w-3xl mx-auto">
+                            <div class="flex items-center mb-6">
+                                <div class="w-16 h-16 rounded-full bg-primary flex items-center justify-center text-white font-bold text-xl mr-4">JD</div>
+                                <div>
+                                    <h4 class="text-xl font-semibold">John Doe</h4>
+                                    <p class="text-gray-600">Marketing Director, TechCorp Inc.</p>
+                                </div>
+                            </div>
+                            <div class="mb-6">
+                                <div class="flex text-yellow-400 mb-2">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                </div>
+                                <p class="text-gray-700 text-lg italic">"The team delivered beyond our expectations. The brand video they created perfectly captured our company's vision and has been instrumental in our recent growth. Their attention to detail and creative approach sets them apart."</p>
+                            </div>
+                            <div class="flex justify-end">
+                                <button class="view-project text-primary font-medium hover:text-secondary transition" data-id="1">View Related Project →</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Testimonial 2 -->
+                    <div class="testimonial-slide">
+                        <div class="bg-white rounded-lg shadow-md p-8 max-w-3xl mx-auto">
+                            <div class="flex items-center mb-6">
+                                <div class="w-16 h-16 rounded-full bg-purple-500 flex items-center justify-center text-white font-bold text-xl mr-4">SJ</div>
+                                <div>
+                                    <h4 class="text-xl font-semibold">Sarah Johnson</h4>
+                                    <p class="text-gray-600">CEO, LuxBrand</p>
+                                </div>
+                            </div>
+                            <div class="mb-6">
+                                <div class="flex text-yellow-400 mb-2">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                </div>
+                                <p class="text-gray-700 text-lg italic">"The product photography exceeded our expectations. Each image tells a story and showcases our products in the best light possible. Since launching the new photos, our online sales have increased dramatically. I couldn't be happier with the results."</p>
+                            </div>
+                            <div class="flex justify-end">
+                                <button class="view-project text-primary font-medium hover:text-secondary transition" data-id="2">View Related Project →</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Testimonial 3 -->
+                    <div class="testimonial-slide">
+                        <div class="bg-white rounded-lg shadow-md p-8 max-w-3xl mx-auto">
+                            <div class="flex items-center mb-6">
+                                <div class="w-16 h-16 rounded-full bg-green-500 flex items-center justify-center text-white font-bold text-xl mr-4">MG</div>
+                                <div>
+                                    <h4 class="text-xl font-semibold">Michael Green</h4>
+                                    <p class="text-gray-600">Founder, EcoFriendly</p>
+                                </div>
+                            </div>
+                            <div class="mb-6">
+                                <div class="flex text-yellow-400 mb-2">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star-half-alt"></i>
+                                </div>
+                                <p class="text-gray-700 text-lg italic">"Our YouTube campaign was a game-changer for our brand. The team understood our mission and created content that resonated with our audience. The videos went viral and helped us reach a whole new customer base. Professional, creative, and results-driven."</p>
+                            </div>
+                            <div class="flex justify-end">
+                                <button class="view-project text-primary font-medium hover:text-secondary transition" data-id="3">View Related Project →</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Testimonial 4 (New) -->
+                    <div class="testimonial-slide">
+                        <div class="bg-white rounded-lg shadow-md p-8 max-w-3xl mx-auto">
+                            <div class="flex items-center mb-6">
+                                <div class="w-16 h-16 rounded-full bg-orange-500 flex items-center justify-center text-white font-bold text-xl mr-4">RK</div>
+                                <div>
+                                    <h4 class="text-xl font-semibold">Rachel Kim</h4>
+                                    <p class="text-gray-600">Event Manager, GlobalConf</p>
+                                </div>
+                            </div>
+                            <div class="mb-6">
+                                <div class="flex text-yellow-400 mb-2">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                </div>
+                                <p class="text-gray-700 text-lg italic">"The event highlight reel captured the essence of our conference perfectly. The team was professional, unobtrusive during filming, and delivered a final product that exceeded our expectations. We've already seen a significant increase in early registrations for next year's event thanks to this video."</p>
+                            </div>
+                            <div class="flex justify-end">
+                                <button class="view-project text-primary font-medium hover:text-secondary transition" data-id="4">View Related Project →</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Testimonial 5 (New) -->
+                    <div class="testimonial-slide">
+                        <div class="bg-white rounded-lg shadow-md p-8 max-w-3xl mx-auto">
+                            <div class="flex items-center mb-6">
+                                <div class="w-16 h-16 rounded-full bg-gray-700 flex items-center justify-center text-white font-bold text-xl mr-4">DM</div>
+                                <div>
+                                    <h4 class="text-xl font-semibold">David Martinez</h4>
+                                    <p class="text-gray-600">Principal Architect, UrbanDesign</p>
+                                </div>
+                            </div>
+                            <div class="mb-6">
+                                <div class="flex text-yellow-400 mb-2">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                </div>
+                                <p class="text-gray-700 text-lg italic">"The architectural photography of our latest project was simply stunning. The photographers understood how to capture the unique elements of our design and showcase the sustainable features. These images helped us win two major industry awards and have been featured in several publications."</p>
+                            </div>
+                            <div class="flex justify-end">
+                                <button class="view-project text-primary font-medium hover:text-secondary transition" data-id="5">View Related Project →</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Testimonial 6 (New) -->
+                    <div class="testimonial-slide">
+                        <div class="bg-white rounded-lg shadow-md p-8 max-w-3xl mx-auto">
+                            <div class="flex items-center mb-6">
+                                <div class="w-16 h-16 rounded-full bg-pink-500 flex items-center justify-center text-white font-bold text-xl mr-4">JT</div>
+                                <div>
+                                    <h4 class="text-xl font-semibold">Jessica Taylor</h4>
+                                    <p class="text-gray-600">Product Director, FitLife</p>
+                                </div>
+                            </div>
+                            <div class="mb-6">
+                                <div class="flex text-yellow-400 mb-2">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                </div>
+                                <p class="text-gray-700 text-lg italic">"The YouTube tutorial series for our fitness equipment has been a tremendous success. Not only have we seen a significant increase in sales, but customer support inquiries have decreased as users can easily find answers in the videos. The production quality is exceptional and the team was a pleasure to work with."</p>
+                            </div>
+                            <div class="flex justify-end">
+                                <button class="view-project text-primary font-medium hover:text-secondary transition" data-id="6">View Related Project →</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Slider Controls -->
+                <div class="flex justify-center mt-8 space-x-2">
+                    <button class="testimonial-dot active w-3 h-3 rounded-full bg-primary" data-slide="0"></button>
+                    <button class="testimonial-dot w-3 h-3 rounded-full bg-gray-300" data-slide="1"></button>
+                    <button class="testimonial-dot w-3 h-3 rounded-full bg-gray-300" data-slide="2"></button>
+                    <button class="testimonial-dot w-3 h-3 rounded-full bg-gray-300" data-slide="3"></button>
+                    <button class="testimonial-dot w-3 h-3 rounded-full bg-gray-300" data-slide="4"></button>
+                    <button class="testimonial-dot w-3 h-3 rounded-full bg-gray-300" data-slide="5"></button>
+                </div>
+                
+                <button class="testimonial-prev absolute top-1/2 left-4 transform -translate-y-1/2 bg-white rounded-full w-10 h-10 flex items-center justify-center shadow-md hover:bg-gray-100 transition">
+                    <i class="fas fa-chevron-left text-primary"></i>
+                </button>
+                <button class="testimonial-next absolute top-1/2 right-4 transform -translate-y-1/2 bg-white rounded-full w-10 h-10 flex items-center justify-center shadow-md hover:bg-gray-100 transition">
+                    <i class="fas fa-chevron-right text-primary"></i>
+                </button>
+            </div>
+            
+            <div class="text-center mt-16">
+                <h3 class="text-2xl font-semibold mb-6">Ready to create something amazing?</h3>
+                <div class="flex flex-wrap justify-center">
+                    <button class="bg-primary text-white px-8 py-3 rounded-md font-semibold hover:bg-secondary transition mr-4 mb-2">Get in Touch</button>
+                    <button class="border-2 border-primary text-primary px-8 py-3 rounded-md font-semibold hover:bg-primary hover:text-white transition mb-2">View More Work</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section Divider -->
+    <div class="section-divider"></div>
+    
+    <!-- Minimal Mac-style Dock Navigation -->
+    <div class="dock-container">
+        <a href="./index.html" class="dock-item active" data-section="welcome">
+            <div class="dock-label">Home</div>
+            <div class="dock-icon">
+                <i class="fas fa-home"></i>
+            </div>
+            <div class="dock-dot"></div>
+        </a>
+        <a href="./tvcabout.html" class="dock-item" data-section="about">
+            <div class="dock-label">About</div>
+            <div class="dock-icon">
+                <i class="fas fa-user"></i>
+            </div>
+            <div class="dock-dot"></div>
+        </a>
+        <a href="./tvcservices.html" class="dock-item" data-section="services">
+            <div class="dock-label">Services</div>
+            <div class="dock-icon">
+                <i class="fas fa-cogs"></i>
+            </div>
+            <div class="dock-dot"></div>
+        </a>
+        <a href="./tvcgallery.html" class="dock-item" data-section="gallery">
+            <div class="dock-label">Gallery</div>
+            <div class="dock-icon">
+                <i class="fas fa-images"></i>
+            </div>
+            <div class="dock-dot"></div>
+        </a>
+        <a href="#clients" class="dock-item" data-section="clients">
+            <div class="dock-label">Clients</div>
+            <div class="dock-icon">
+                <i class="fas fa-handshake"></i>
+            </div>
+            <div class="dock-dot"></div>
+        </a>
+        <a href="./contactus.html" class="dock-item" data-section="contact">
+            <div class="dock-label">Contact</div>
+            <div class="dock-icon">
+                <i class="fas fa-envelope"></i>
+            </div>
+            <div class="dock-dot"></div>
+        </a>
+    </div>
+<style>
+
+ /* Footer Styles */
+    .footer {
+        background: #111827;
+        color: white;
+        padding: 4rem 0 0;
+        position: relative;
+    }
+    
+    .footer h4 {
+        font-size: 1.2rem;
+        margin-bottom: 1.5rem;
+        font-weight: 600;
+        position: relative;
+        padding-bottom: 10px;
+    }
+    
+    .footer h4::after {
+        content: '';
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        width: 50px;
+        height: 2px;
+        background: rgba(255, 255, 255, 0.3);
+    }
+    
+    .footer-links {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+    
+    .footer-links li {
+        margin-bottom: 10px;
+    }
+    
+    .footer-links a {
+        color: rgba(255, 255, 255, 0.7);
+        text-decoration: none;
+        transition: all 0.3s ease;
+        display: block;
+        position: relative;
+        padding-left: 15px;
+    }
+    
+    .footer-links a:before {
+        content: '›';
+        position: absolute;
+        left: 0;
+        top: 0;
+        transition: all 0.3s ease;
+    }
+    
+    .footer-links a:hover {
+        color: white;
+        transform: translateX(5px);
+    }
+    
+    .footer-links a:hover:before {
+        color: white;
+    }
+    
+    .footer-contact p {
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+    }
+    
+    .footer-contact i {
+        margin-right: 10px;
+        color: rgba(255, 255, 255, 0.7);
+        width: 20px;
+        text-align: center;
+    }
+    
+    .social-links {
+        margin-top: 20px;
+    }
+    
+    .social-links a {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.1);
+        color: white;
+        margin-right: 10px;
+        transition: all 0.3s ease;
+    }
+    
+    .social-links a:hover {
+        background: white;
+        color: #1e5eab;
+        transform: translateY(-3px);
+    }
+    
+    .footer-bottom {
+        background: rgba(0, 0, 0, 0.2);
+        padding: 20px 0;
+        margin-top: 3rem;
+        text-align: center;
+    }
+    
+    .footer-bottom p {
+        margin: 0;
+        font-size: 0.9rem;
+        color: rgba(255, 255, 255, 0.7);
+    }
+    
+    .footer-newsletter {
+        position: relative;
+    }
+    
+    .footer-newsletter input {
+        width: 100%;
+        padding: 10px 15px;
+        border-radius: 30px;
+        border: none;
+        background: rgba(255, 255, 255, 0.1);
+        color: white;
+        outline: none;
+        padding-right: 50px;
+    }
+    
+    .footer-newsletter input::placeholder {
+        color: rgba(255, 255, 255, 0.5);
+    }
+    
+    .footer-newsletter button {
+        position: absolute;
+        right: 5px;
+        top: 5px;
+        border: none;
+        background: white;
+        color: #1e5eab;
+        border-radius: 50%;
+        width: 30px;
+        height: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+    
+    .footer-newsletter button:hover {
+        background: #f0f0f0;
+        transform: scale(1.1);
+    }
+
+</style>
+
+
+    <!-- Footer -->
+    <footer class="footer" id="contact">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-3 col-md-6 mb-4 mb-lg-0">
+                    <h4>About Us</h4>
+                    <div>
+                        <img src="./public/WHITE Logo Text PNG.png" alt="" style="width:220px; gap: 20px">
+                    </div>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                
+                <div class="col-lg-3 col-md-6 mb-4 mb-lg-0">
+                    <h4>Quick Links</h4>
+                    <ul class="footer-links">
+                        <li><a href="./index.html">Home</a></li>
+                        <li><a href="./tvcservices.html">Services</a></li>
+                        <li><a href="./tvcgallery_02.html">Portfolio</a></li>
+                        <li><a href="./tvccarreer.html">Careers</a></li>
+                        <li><a href="./contactus.html">Contact Us</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                    </ul>
+                </div>
+                
+                <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
+                    <h4>Our Services</h4>
+                    <ul class="footer-links">
+                        <li><a href="#">Video Production</a></li>
+                        <li><a href="#">Commercial Filming</a></li>
+                        <li><a href="#">Corporate Videos</a></li>
+                        <li><a href="#">Event Coverage</a></li>
+                        <li><a href="#">Drone Filming</a></li>
+                        <li><a href="#">Post Production</a></li>
+                    </ul>
+                </div>
+                
+                <div class="col-lg-3 col-md-6">
+                    <h4>Contact Us</h4>
+                    <div class="footer-contact">
+                        <p><i class="fas fa-map-marker-alt"></i> #5/2 NGR Layout, 17th Cross,<br>Bangalore - 560068</p>
+                        <p><i class="fas fa-phone"></i> +91 74116 11528</p>
+                        <p><i class="fas fa-envelope"></i> connect@thevideocompany.in</p>
+                    </div>
+                    
+                    <div class="footer-newsletter mt-4">
+                        <h4>Newsletter</h4>
+                        <p>Subscribe to our newsletter for updates</p>
+                        <form>
+                            <div class="position-relative">
+                                <input type="email" placeholder="Your email address">
+                                <button type="submit"><i class="fas fa-paper-plane"></i></button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <div class="container">
+                <p>&copy; 2023 The Video Company. All Rights Reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        // Testimonials slider functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const slides = document.querySelectorAll('.testimonial-slide');
+            const dots = document.querySelectorAll('.testimonial-dot');
+            const prevBtn = document.querySelector('.testimonial-prev');
+            const nextBtn = document.querySelector('.testimonial-next');
+            let currentSlide = 0;
+            
+            // Show initial slide
+            showSlide(currentSlide);
+            
+            // Dot click event
+            dots.forEach((dot, index) => {
+                dot.addEventListener('click', () => {
+                    currentSlide = index;
+                    showSlide(currentSlide);
+                });
+            });
+            
+            // Previous button
+            prevBtn.addEventListener('click', () => {
+                currentSlide = (currentSlide - 1 + slides.length) % slides.length;
+                showSlide(currentSlide);
+            });
+            
+            // Next button
+            nextBtn.addEventListener('click', () => {
+                currentSlide = (currentSlide + 1) % slides.length;
+                showSlide(currentSlide);
+            });
+            
+            // Auto-advance slides every 5 seconds
+            setInterval(() => {
+                currentSlide = (currentSlide + 1) % slides.length;
+                showSlide(currentSlide);
+            }, 5000);
+            
+            // Show slide function
+            function showSlide(index) {
+                // Hide all slides
+                slides.forEach(slide => {
+                    slide.classList.remove('active');
+                });
+                
+                // Remove active class from all dots
+                dots.forEach(dot => {
+                    dot.classList.remove('active');
+                    dot.classList.add('bg-gray-300');
+                    dot.classList.remove('bg-primary');
+                });
+                
+                // Show current slide
+                slides[index].classList.add('active');
+                
+                // Update dot
+                dots[index].classList.add('active', 'bg-primary');
+                dots[index].classList.remove('bg-gray-300');
+            }
+            
+            // Scroll-based dock visibility
+            let lastScrollTop = 0;
+            const dockContainer = document.querySelector('.dock-container');
+            const scrollThreshold = 10; // Minimum scroll amount to trigger hide/show
+            
+            window.addEventListener('scroll', function() {
+                const currentScrollTop = window.pageYOffset || document.documentElement.scrollTop;
+                
+                // Check if we've scrolled more than the threshold
+                if (Math.abs(lastScrollTop - currentScrollTop) <= scrollThreshold) {
+                    return;
+                }
+                
+                // Scrolling down
+                if (currentScrollTop > lastScrollTop) {
+                    dockContainer.classList.add('dock-hidden');
+                } 
+                // Scrolling up
+                else {
+                    dockContainer.classList.remove('dock-hidden');
+                }
+                
+                lastScrollTop = currentScrollTop;
+            });
+            
+            // Show dock when mouse moves to bottom of screen
+            document.addEventListener('mousemove', function(e) {
+                const windowHeight = window.innerHeight;
+                const bottomThreshold = windowHeight - 100;
+                
+                if (e.clientY > bottomThreshold) {
+                    dockContainer.classList.remove('dock-hidden');
+                }
+            });
+            
+            // Smooth scrolling for anchor links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    
+                    const targetId = this.getAttribute('href');
+                    if (targetId === '#') return;
+                    
+                    const targetElement = document.querySelector(targetId);
+                    if (targetElement) {
+                        targetElement.scrollIntoView({
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+            
+            // Filter gallery items
+            const filterButtons = document.querySelectorAll('.filter-btn');
+            const galleryItems = document.querySelectorAll('.gallery-item');
+            
+            filterButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    // Update active tab
+                    filterButtons.forEach(btn => {
+                        btn.classList.remove('tab-active');
+                        btn.classList.add('bg-gray-200');
+                    });
+                    button.classList.add('tab-active');
+                    button.classList.remove('bg-gray-200');
+                    
+                    // Filter items
+                    const filter = button.getAttribute('data-filter');
+                    
+                    galleryItems.forEach(item => {
+                        if (filter === 'all' || item.getAttribute('data-category') === filter) {
+                            item.style.display = 'block';
+                        } else {
+                            item.style.display = 'none';
+                        }
+                    });
+                });
+            });
+            
+            // Explore button scroll to portfolio
+            document.getElementById('explore-btn').addEventListener('click', () => {
+                document.getElementById('portfolio').scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+</body>
+</html>

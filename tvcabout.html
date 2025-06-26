@@ -1,0 +1,1244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About - The Video Company</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Lightbox CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/css/lightbox.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- AOS Animation Library -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="shortcut icon" href="./public/TVC-01.png" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+       :root {
+        --primary: #1E5EAB;
+        --primary-light: #2a6fbd;
+        --primary-dark: #174a87;
+    }
+    
+    body {
+        font-family: 'Poppins', sans-serif;
+        scroll-behavior: smooth;
+    }
+    
+    .team-card {
+        transition: all 0.3s ease;
+        cursor: pointer;
+    }
+    
+    .team-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 20px 25px -5px rgba(30, 94, 171, 0.25);
+    }
+    
+    .animate-fade-in {
+        opacity: 0;
+        transform: translateY(20px);
+        transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+    }
+    
+    .animate-fade-in.visible {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    
+    .progress-bar {
+        height: 8px;
+        background-color: #e0e0e0;
+        border-radius: 4px;
+        overflow: hidden;
+    }
+    
+    .progress-fill {
+        height: 100%;
+        background-color: var(--primary);
+        border-radius: 4px;
+        transition: width 1s ease-in-out;
+    }
+    
+    .quote-mark {
+        font-size: 5rem;
+        line-height: 0;
+        position: absolute;
+        color: rgba(30, 94, 171, 0.1);
+    }
+    
+    .quote-left {
+        top: 20px;
+        left: 10px;
+    }
+    
+    .quote-right {
+        bottom: 0;
+        right: 10px;
+    }
+    
+    .modal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.7);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 50;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.3s ease, visibility 0.3s ease;
+    }
+    
+    .modal.active {
+        opacity: 1;
+        visibility: visible;
+    }
+    
+    .modal-content {
+        background-color: white;
+        border-radius: 12px;
+        overflow: hidden;
+        width: 90%;
+        max-width: 900px;
+        max-height: 90vh;
+        display: flex;
+        flex-direction: column;
+        transform: scale(0.8);
+        transition: transform 0.3s ease;
+    }
+    
+    .modal.active .modal-content {
+        transform: scale(1);
+    }
+    
+    .modal-body {
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+    }
+    
+    @media (min-width: 768px) {
+        .modal-body {
+            flex-direction: row;
+            max-height: 80vh;
+        }
+    }
+    
+    .modal-image {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0;
+        height: 300px;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    @media (min-width: 768px) {
+        .modal-image {
+            width: 40%;
+            height: auto;
+        }
+    }
+    
+    .modal-info {
+        padding: 2rem;
+        overflow-y: auto;
+    }
+    
+    .close-btn {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        background-color: white;
+        width: 2.5rem;
+        height: 2.5rem;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        z-index: 60;
+        transition: all 0.2s ease;
+    }
+    
+    .close-btn:hover {
+        background-color: #f3f4f6;
+        transform: scale(1.1);
+    }
+    
+    .member-image-container {
+        width: 100%;
+        height: 100%;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .member-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        filter: grayscale(100%);
+        transition: filter 0.5s ease;
+    }
+    
+    .member-image-container:hover .member-image {
+        filter: grayscale(0%);
+    }
+    
+    .team-card-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        filter: grayscale(100%);
+        transition: filter 0.5s ease;
+    }
+    
+    .team-card:hover .team-card-image {
+        filter: grayscale(0%);
+    }
+    
+    /* Carousel Styles */
+    .carousel {
+        position: relative;
+        overflow: hidden;
+        width: 100%;
+    }
+    
+    .carousel-inner {
+        display: flex;
+        transition: transform 0.5s ease;
+    }
+    
+    .carousel-item {
+        min-width: 100%;
+        opacity: 0.4;
+        transition: opacity 0.5s ease;
+    }
+    
+    .carousel-item.active {
+        opacity: 1;
+    }
+    
+    .carousel-controls {
+        display: flex;
+        justify-content: center;
+        margin-top: 20px;
+    }
+    
+    .carousel-dot {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background-color: #ccc;
+        margin: 0 6px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+    
+    .carousel-dot.active {
+        background-color: var(--primary);
+        transform: scale(1.2);
+    }
+    
+    .carousel-arrow {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 40px;
+        height: 40px;
+        background-color: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        z-index: 10;
+        transition: all 0.2s ease;
+    }
+    
+    .carousel-arrow:hover {
+        background-color: var(--primary);
+        color: white;
+    }
+    
+    .carousel-arrow-left {
+        left: 20px;
+    }
+    
+    .carousel-arrow-right {
+        right: 20px;
+    }
+
+    /* Footer Styles */
+    .footer {
+        background: #111827;
+        color: white;
+        padding: 4rem 0 0;
+        position: relative;
+    }
+    
+    .footer h4 {
+        font-size: 1.2rem;
+        margin-bottom: 1.5rem;
+        font-weight: 600;
+        position: relative;
+        padding-bottom: 10px;
+    }
+    
+    .footer h4::after {
+        content: '';
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        width: 50px;
+        height: 2px;
+        background: rgba(255, 255, 255, 0.3);
+    }
+    
+    .footer-links {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+    
+    .footer-links li {
+        margin-bottom: 10px;
+    }
+    
+    .footer-links a {
+        color: rgba(255, 255, 255, 0.7);
+        text-decoration: none;
+        transition: all 0.3s ease;
+        display: block;
+        position: relative;
+        padding-left: 15px;
+    }
+    
+    .footer-links a:before {
+        content: '›';
+        position: absolute;
+        left: 0;
+        top: 0;
+        transition: all 0.3s ease;
+    }
+    
+    .footer-links a:hover {
+        color: white;
+        transform: translateX(5px);
+    }
+    
+    .footer-links a:hover:before {
+        color: white;
+    }
+    
+    .footer-contact p {
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+    }
+    
+    .footer-contact i {
+        margin-right: 10px;
+        color: rgba(255, 255, 255, 0.7);
+        width: 20px;
+        text-align: center;
+    }
+    
+    .social-links {
+        margin-top: 20px;
+    }
+    
+    .social-links a {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.1);
+        color: white;
+        margin-right: 10px;
+        transition: all 0.3s ease;
+    }
+    
+    .social-links a:hover {
+        background: white;
+        color: #1e5eab;
+        transform: translateY(-3px);
+    }
+    
+    .footer-bottom {
+        background: rgba(0, 0, 0, 0.2);
+        padding: 20px 0;
+        margin-top: 3rem;
+        text-align: center;
+    }
+    
+    .footer-bottom p {
+        margin: 0;
+        font-size: 0.9rem;
+        color: rgba(255, 255, 255, 0.7);
+    }
+    
+    .footer-newsletter {
+        position: relative;
+    }
+    
+    .footer-newsletter input {
+        width: 100%;
+        padding: 10px 15px;
+        border-radius: 30px;
+        border: none;
+        background: rgba(255, 255, 255, 0.1);
+        color: white;
+        outline: none;
+        padding-right: 50px;
+    }
+    
+    .footer-newsletter input::placeholder {
+        color: rgba(255, 255, 255, 0.5);
+    }
+    
+    .footer-newsletter button {
+        position: absolute;
+        right: 5px;
+        top: 5px;
+        border: none;
+        background: white;
+        color: #1e5eab;
+        border-radius: 50%;
+        width: 30px;
+        height: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+    
+    .footer-newsletter button:hover {
+        background: #f0f0f0;
+        transform: scale(1.1);
+    }
+    
+    /* Minimal Mac-style Dock */
+    .dock-container {
+        position: fixed;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 1000;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 8px 15px;
+        background: rgba(255, 255, 255, 0.85);
+        border-radius: 16px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+        border: 1px solid rgba(255, 255, 255, 0.5);
+        transition: all 0.3s ease;
+    }
+    
+    /* Hide dock animation */
+    .dock-hidden {
+        transform: translate(-50%, 100px);
+        opacity: 0;
+    }
+    
+    .dock-item {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 8px;
+        transition: all 0.3s ease;
+        position: relative;
+    }
+    
+    .dock-icon {
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #1e5eab;
+        color: white;
+        border-radius: 10px;
+        font-size: 18px;
+        box-shadow: 0 2px 8px rgba(30, 94, 171, 0.3);
+        transition: all 0.3s ease;
+        position: relative;
+    }
+    
+    .dock-item:hover .dock-icon {
+        transform: translateY(-5px);
+    }
+    
+    .dock-item:hover .dock-label {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    
+    .dock-label {
+        position: absolute;
+        top: -30px;
+        background: rgba(0, 0, 0, 0.7);
+        color: white;
+        padding: 3px 10px;
+        border-radius: 12px;
+        font-size: 11px;
+        font-weight: 500;
+        opacity: 0;
+        transform: translateY(10px);
+        transition: all 0.3s ease;
+        white-space: nowrap;
+    }
+    
+    /* Loading animation */
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
+    .animate-spin {
+        animation: spin 1.5s linear infinite;
+    }
+
+    /* Mobile Responsive Styles */
+    @media (max-width: 767.98px) {
+        .footer {
+            text-align: center;
+        }
+        
+        .footer h4::after {
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        
+        .footer-links li {
+            text-align: center;
+        }
+        
+        .footer-contact p {
+            justify-content: center;
+        }
+        
+        .social-links {
+            justify-content: center;
+        }
+        
+        .footer-newsletter {
+            max-width: 300px;
+            margin: 0 auto;
+        }
+        
+        .dock-icon {
+            width: 32px;
+            height: 32px;
+            font-size: 14px;
+        }
+        
+        .dock-label {
+            font-size: 9px;
+            top: -25px;
+        }
+    }
+</style>
+
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div id="loadingScreen" class="fixed inset-0 z-50 flex items-center justify-center bg-white transition-opacity duration-500">
+        <div class="relative w-32 h-32">
+            <!-- Big inner circle -->
+            <div class="absolute inset-0 rounded-full border-4 border-blue-500 border-opacity-30"></div>
+            
+            <!-- Rotating outer circle -->
+            <div class="absolute inset-0 rounded-full border-4 border-transparent border-t-blue-500 border-r-blue-500 animate-spin" style="animation-duration: 1.5s"></div>
+            
+            <!-- Company logo in center -->
+            <div class="absolute inset-0 flex items-center justify-center">
+                <img src="./public/Logo Blue Text PNG  .png" alt="Loading" class="w-20">
+            </div>
+        </div>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="relative overflow-hidden bg-gradient-to-br from-[#1E5EAB] to-[#174a87] text-white">
+        <div class="absolute top-0 left-0 w-full h-full">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320" class="absolute bottom-0 left-0">
+                <path fill="rgba(255,255,255,0.1)" fill-opacity="1" d="M0,192L48,176C96,160,192,128,288,128C384,128,480,160,576,165.3C672,171,768,149,864,149.3C960,149,1056,171,1152,165.3C1248,160,1344,128,1392,112L1440,96L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path>
+            </svg>
+        </div>
+        <div class="container mx-auto px-6 py-20 relative z-10">
+            <div class="text-center max-w-3xl mx-auto">
+                <h1 class="text-5xl md:text-6xl font-bold mb-6 animate-fade-in visible">Our Story</h1>
+                <p class="text-xl md:text-2xl mb-10 animate-fade-in visible" style="transition-delay: 0.2s;">We're a team of passionate professionals dedicated to excellence and innovation.</p>
+                <div class="flex justify-center animate-fade-in visible" style="transition-delay: 0.4s;">
+                    <div class="w-20 h-2 bg-white rounded-full"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Us Section -->
+    <section class="py-20 px-6">
+        <div class="container mx-auto max-w-6xl">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+                <div class="animate-fade-in">
+                    <div class="relative">
+                        
+                        <img src="./public/Logo Blue Text PNG  .png" alt="" width="400px">
+                    </div>
+                </div>
+                <div class="animate-fade-in" style="transition-delay: 0.2s;">
+                    <h2 class="text-4xl font-bold mb-6 text-gray-800">Who We Are</h2>
+                    <p class="text-lg text-gray-600 mb-6">Founded in 2010, our company has grown from a small startup to an industry leader. We believe in pushing boundaries and challenging the status quo to deliver exceptional results for our clients.</p>
+                    <p class="text-lg text-gray-600 mb-8">Our diverse team brings together expertise from various fields, creating a dynamic environment where innovation thrives and excellence is the standard.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Team Section -->
+    <section class="py-20 px-6 bg-gray-100">
+        <div class="container mx-auto max-w-6xl">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold mb-4 text-gray-800 animate-fade-in">Meet Our Team</h2>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto animate-fade-in" style="transition-delay: 0.2s;">The brilliant minds behind our success. Each member brings unique expertise and passion to our collective mission.</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="teamGrid">
+                <!-- Team Member 1 -->
+                <div class="team-card bg-white rounded-xl overflow-hidden shadow-lg animate-fade-in" style="transition-delay: 0.3s;" data-member-id="1">
+                    <div class="h-64 relative overflow-hidden">
+                        <svg class="team-card-image" viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+                            <defs>
+                                <pattern id="img1" patternUnits="userSpaceOnUse" width="400" height="300">
+                                    <image href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0MDAgMzAwIj48cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgZmlsbD0iI2YwZjBmMCIvPjxjaXJjbGUgY3g9IjIwMCIgY3k9IjEwMCIgcj0iNzAiIGZpbGw9IiNkZGRkZGQiLz48Y2lyY2xlIGN4PSIyMDAiIGN5PSI4NSIgcj0iNDAiIGZpbGw9IiNmMGYwZjAiLz48ZWxsaXBzZSBjeD0iMjAwIiBjeT0iMjIwIiByeD0iMTIwIiByeT0iODAiIGZpbGw9IiNkZGRkZGQiLz48cmVjdCB4PSIxNzAiIHk9IjEzMCIgd2lkdGg9IjYwIiBoZWlnaHQ9IjEwMCIgZmlsbD0iI2RkZGRkZCIvPjxjaXJjbGUgY3g9IjE3MCIgY3k9IjgwIiByPSI4IiBmaWxsPSIjNTU1Ii8+PGNpcmNsZSBjeD0iMjMwIiBjeT0iODAiIHI9IjgiIGZpbGw9IiM1NTUiLz48cGF0aCBkPSJNMTcwLDExMCBRMjAwLDEzMCAyMzAsMTEwIiBzdHJva2U9IiM1NTUiIHN0cm9rZS13aWR0aD0iMyIgZmlsbD0ibm9uZSIvPjwvc3ZnPg==" x="0" y="0" width="400" height="300" />
+                                </pattern>
+                                <linearGradient id="colorGrad1" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" style="stop-color:#1E5EAB;stop-opacity:1" />
+                                    <stop offset="100%" style="stop-color:#3a7fcf;stop-opacity:1" />
+                                </linearGradient>
+                            </defs>
+                            <rect width="400" height="300" fill="url(#img1)" />
+                            <rect width="400" height="300" fill="url(#colorGrad1)" style="mix-blend-mode: color" />
+                        </svg>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-2xl font-bold text-gray-800 mb-2">Sarah Johnson</h3>
+                        <p class="text-[#1E5EAB] font-medium mb-4">Chief Executive Officer</p>
+                        <p class="text-gray-600 mb-6">With over 15 years of industry experience, Sarah has led our company to new heights with her visionary leadership and strategic thinking.</p>
+                        <div class="flex space-x-3">
+                            <span class="px-3 py-1 bg-blue-100 text-[#1E5EAB] rounded-full text-sm">Leadership</span>
+                            <span class="px-3 py-1 bg-blue-100 text-[#1E5EAB] rounded-full text-sm">Strategy</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Team Member 2 -->
+                <div class="team-card bg-white rounded-xl overflow-hidden shadow-lg animate-fade-in" style="transition-delay: 0.4s;" data-member-id="2">
+                    <div class="h-64 relative overflow-hidden">
+                        <svg class="team-card-image" viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+                            <defs>
+                                <pattern id="img2" patternUnits="userSpaceOnUse" width="400" height="300">
+                                    <image href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0MDAgMzAwIj48cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgZmlsbD0iI2YwZjBmMCIvPjxjaXJjbGUgY3g9IjIwMCIgY3k9IjEwMCIgcj0iNzAiIGZpbGw9IiNkZGRkZGQiLz48Y2lyY2xlIGN4PSIyMDAiIGN5PSI4NSIgcj0iNDAiIGZpbGw9IiNmMGYwZjAiLz48ZWxsaXBzZSBjeD0iMjAwIiBjeT0iMjIwIiByeD0iMTIwIiByeT0iODAiIGZpbGw9IiNkZGRkZGQiLz48cmVjdCB4PSIxNzAiIHk9IjEzMCIgd2lkdGg9IjYwIiBoZWlnaHQ9IjEwMCIgZmlsbD0iI2RkZGRkZCIvPjxjaXJjbGUgY3g9IjE3MCIgY3k9IjgwIiByPSI4IiBmaWxsPSIjNTU1Ii8+PGNpcmNsZSBjeD0iMjMwIiBjeT0iODAiIHI9IjgiIGZpbGw9IiM1NTUiLz48cGF0aCBkPSJNMTcwLDExMCBRMjAwLDEzMCAyMzAsMTEwIiBzdHJva2U9IiM1NTUiIHN0cm9rZS13aWR0aD0iMyIgZmlsbD0ibm9uZSIvPjwvc3ZnPg==" x="0" y="0" width="400" height="300" />
+                                </pattern>
+                                <linearGradient id="colorGrad2" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" style="stop-color:#2a6fbd;stop-opacity:1" />
+                                    <stop offset="100%" style="stop-color:#4b90e0;stop-opacity:1" />
+                                </linearGradient>
+                            </defs>
+                            <rect width="400" height="300" fill="url(#img2)" />
+                            <rect width="400" height="300" fill="url(#colorGrad2)" style="mix-blend-mode: color" />
+                        </svg>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-2xl font-bold text-gray-800 mb-2">Michael Chen</h3>
+                        <p class="text-[#1E5EAB] font-medium mb-4">Chief Technology Officer</p>
+                        <p class="text-gray-600 mb-6">Michael's innovative approach to technology has revolutionized our product development process and kept us at the cutting edge of the industry.</p>
+                        <div class="flex space-x-3">
+                            <span class="px-3 py-1 bg-blue-100 text-[#1E5EAB] rounded-full text-sm">Innovation</span>
+                            <span class="px-3 py-1 bg-blue-100 text-[#1E5EAB] rounded-full text-sm">Tech</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Team Member 3 -->
+                <div class="team-card bg-white rounded-xl overflow-hidden shadow-lg animate-fade-in" style="transition-delay: 0.5s;" data-member-id="3">
+                    <div class="h-64 relative overflow-hidden">
+                        <svg class="team-card-image" viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+                            <defs>
+                                <pattern id="img3" patternUnits="userSpaceOnUse" width="400" height="300">
+                                    <image href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0MDAgMzAwIj48cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgZmlsbD0iI2YwZjBmMCIvPjxjaXJjbGUgY3g9IjIwMCIgY3k9IjEwMCIgcj0iNzAiIGZpbGw9IiNkZGRkZGQiLz48Y2lyY2xlIGN4PSIyMDAiIGN5PSI4NSIgcj0iNDAiIGZpbGw9IiNmMGYwZjAiLz48ZWxsaXBzZSBjeD0iMjAwIiBjeT0iMjIwIiByeD0iMTIwIiByeT0iODAiIGZpbGw9IiNkZGRkZGQiLz48cmVjdCB4PSIxNzAiIHk9IjEzMCIgd2lkdGg9IjYwIiBoZWlnaHQ9IjEwMCIgZmlsbD0iI2RkZGRkZCIvPjxjaXJjbGUgY3g9IjE3MCIgY3k9IjgwIiByPSI4IiBmaWxsPSIjNTU1Ii8+PGNpcmNsZSBjeD0iMjMwIiBjeT0iODAiIHI9IjgiIGZpbGw9IiM1NTUiLz48cGF0aCBkPSJNMTcwLDExMCBRMjAwLDEzMCAyMzAsMTEwIiBzdHJva2U9IiM1NTUiIHN0cm9rZS13aWR0aD0iMyIgZmlsbD0ibm9uZSIvPjwvc3ZnPg==" x="0" y="0" width="400" height="300" />
+                                </pattern>
+                                <linearGradient id="colorGrad3" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" style="stop-color:#174a87;stop-opacity:1" />
+                                    <stop offset="100%" style="stop-color:#2a6fbd;stop-opacity:1" />
+                                </linearGradient>
+                            </defs>
+                            <rect width="400" height="300" fill="url(#img3)" />
+                            <rect width="400" height="300" fill="url(#colorGrad3)" style="mix-blend-mode: color" />
+                        </svg>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-2xl font-bold text-gray-800 mb-2">Elena Rodriguez</h3>
+                        <p class="text-[#1E5EAB] font-medium mb-4">Creative Director</p>
+                        <p class="text-gray-600 mb-6">Elena's creative vision has shaped our brand identity and helped us connect with audiences through compelling visual storytelling.</p>
+                        <div class="flex space-x-3">
+                            <span class="px-3 py-1 bg-blue-100 text-[#1E5EAB] rounded-full text-sm">Design</span>
+                            <span class="px-3 py-1 bg-blue-100 text-[#1E5EAB] rounded-full text-sm">Creativity</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-16 text-center">
+                <button class="px-8 py-3 bg-[#1E5EAB] hover:bg-[#174a87] text-white font-medium rounded-full transition-all transform hover:scale-105 animate-fade-in" style="transition-delay: 0.6s;" id="loadMoreBtn">
+                    Meet More Team Members
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Values Section -->
+    <section class="py-20 px-6 bg-[#1E5EAB] text-white">
+        <div class="container mx-auto max-w-6xl">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold mb-4 animate-fade-in">Our Core Values</h2>
+                <p class="text-xl max-w-3xl mx-auto animate-fade-in" style="transition-delay: 0.2s;">The principles that guide everything we do and define who we are as a team.</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <!-- Value 1 -->
+                <div class="bg-white bg-opacity-10 p-6 rounded-xl backdrop-blur-sm animate-fade-in" style="transition-delay: 0.3s;">
+                    <div class="w-16 h-16 bg-white rounded-full flex items-center justify-center mb-6 mx-auto">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-[#1E5EAB]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3 text-center">Innovation</h3>
+                    <p class="text-center text-white text-opacity-80">We constantly push boundaries and challenge the status quo to create breakthrough solutions.</p>
+                </div>
+                
+                <!-- Value 2 -->
+                <div class="bg-white bg-opacity-10 p-6 rounded-xl backdrop-blur-sm animate-fade-in" style="transition-delay: 0.4s;">
+                    <div class="w-16 h-16 bg-white rounded-full flex items-center justify-center mb-6 mx-auto">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-[#1E5EAB]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3 text-center">Collaboration</h3>
+                    <p class="text-center text-white text-opacity-80">We believe in the power of diverse perspectives coming together to achieve extraordinary results.</p>
+                </div>
+                
+                <!-- Value 3 -->
+                <div class="bg-white bg-opacity-10 p-6 rounded-xl backdrop-blur-sm animate-fade-in" style="transition-delay: 0.5s;">
+                    <div class="w-16 h-16 bg-white rounded-full flex items-center justify-center mb-6 mx-auto">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-[#1E5EAB]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3 text-center">Integrity</h3>
+                    <p class="text-center text-white text-opacity-80">We uphold the highest ethical standards in all our interactions and decisions.</p>
+                </div>
+                
+                <!-- Value 4 -->
+                <div class="bg-white bg-opacity-10 p-6 rounded-xl backdrop-blur-sm animate-fade-in" style="transition-delay: 0.6s;">
+                    <div class="w-16 h-16 bg-white rounded-full flex items-center justify-center mb-6 mx-auto">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-[#1E5EAB]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3 text-center">Passion</h3>
+                    <p class="text-center text-white text-opacity-80">We bring enthusiasm and dedication to everything we do, driving excellence in all our endeavors.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer" id="contact">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-3 col-md-6 mb-4 mb-lg-0">
+                    <h4>About Us</h4>
+                    <div>
+                        <img src="./public/WHITE Logo Text PNG.png" alt="" style="width:220px; gap: 20px">
+                    </div>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="https://www.instagram.com/thevideocompany.in/"><i class="fab fa-instagram"></i></a>
+                        <a href="https://www.linkedin.com/company/the-video-company-in/"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="https://www.youtube.com/@thevideocompanydotin"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                
+                <div class="col-lg-3 col-md-6 mb-4 mb-lg-0">
+                    <h4>Quick Links</h4>
+                    <ul class="footer-links">
+                        <li><a href="./index.html">Home</a></li>
+                        <li><a href="./tvcservices.html">Services</a></li>
+                        <li><a href="./tvcgallery_02.html">Portfolio</a></li>
+                        <li><a href="./tvccarreer.html">Careers</a></li>
+                        <li><a href="./contactus.html">Contact Us</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                    </ul>
+                </div>
+                
+                <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
+                    <h4>Our Services</h4>
+                    <ul class="footer-links">
+                        <li><a href="#">Video Production</a></li>
+                        <li><a href="#">Commercial Filming</a></li>
+                        <li><a href="#">Corporate Videos</a></li>
+                        <li><a href="#">Event Coverage</a></li>
+                        <li><a href="#">Drone Filming</a></li>
+                        <li><a href="#">Post Production</a></li>
+                    </ul>
+                </div>
+                
+                <div class="col-lg-3 col-md-6">
+                    <h4>Contact Us</h4>
+                    <div class="footer-contact">
+                        <p><i class="fas fa-map-marker-alt"></i> #5/2 NGR Layout, 17th Cross,<br>Bangalore - 560068</p>
+                        <p><i class="fas fa-phone"></i> +91 74116 11528</p>
+                        <p><i class="fas fa-envelope"></i> connect@thevideocompany.in</p>
+                    </div>
+                    
+                    <div class="footer-newsletter mt-4">
+                        <h4>Newsletter</h4>
+                        <p>Subscribe to our newsletter for updates</p>
+                        <form>
+                            <div class="position-relative">
+                                <input type="email" placeholder="Your email address">
+                                <button type="submit"><i class="fas fa-paper-plane"></i></button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <div class="container">
+                <p>&copy; 2023 The Video Company. All Rights Reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Team Member Modal -->
+    <div class="modal" id="teamModal">
+        <div class="close-btn" id="closeModal">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-800" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+        </div>
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="modal-image w-full md:w-2/5" id="memberImage">
+                    <!-- Member image will be inserted here -->
+                </div>
+                <div class="modal-info w-full md:w-3/5" id="memberInfo">
+                    <!-- Member info will be inserted here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Minimal Mac-style Dock Navigation -->
+    <div class="dock-container">
+        <a href="./index.html" class="dock-item" data-section="welcome">
+            <div class="dock-label">Home</div>
+            <div class="dock-icon">
+                <i class="fas fa-home"></i>
+            </div>
+        </a>
+        <a href="./tvcabout.html" class="dock-item active" data-section="about">
+            <div class="dock-label">About</div>
+            <div class="dock-icon">
+                <i class="fas fa-user"></i>
+            </div>
+        </a>
+        <a href="./tvcservices.html" class="dock-item" data-section="services">
+            <div class="dock-label">Services</div>
+            <div class="dock-icon">
+                <i class="fas fa-cogs"></i>
+            </div>
+        </a>
+        <a href="./tvcgallery_02.html" class="dock-item" data-section="gallery">
+            <div class="dock-label">Gallery</div>
+            <div class="dock-icon">
+                <i class="fas fa-images"></i>
+            </div>
+        </a>
+        <a href="#clients" class="dock-item" data-section="clients">
+            <div class="dock-label">Clients</div>
+            <div class="dock-icon">
+                <i class="fas fa-handshake"></i>
+            </div>
+        </a>
+        <a href="./contactus.html" class="dock-item" data-section="contact">
+            <div class="dock-label">Contact</div>
+            <div class="dock-icon">
+                <i class="fas fa-envelope"></i>
+            </div>
+        </a>
+    </div>
+
+    <!-- Bootstrap JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Lightbox JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/js/lightbox.min.js"></script>
+    <!-- AOS Animation Library -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        // Initialize AOS
+        AOS.init({
+            duration: 800,
+            easing: 'ease-out',
+            once: true
+        });
+        
+        // Show loading screen when page starts loading
+        document.addEventListener('DOMContentLoaded', function() {
+            // Hide loading screen after 1.5 seconds (or when page fully loads)
+            setTimeout(function() {
+                document.getElementById('loadingScreen').style.opacity = '0';
+                setTimeout(function() {
+                    document.getElementById('loadingScreen').style.display = 'none';
+                }, 500); // Match this with the CSS transition duration
+            }, 1500);
+        });
+
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 20,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // Dock navigation functionality
+        document.querySelectorAll('.dock-item').forEach(item => {
+            item.addEventListener('click', function(e) {
+                // Remove active class from all items
+                document.querySelectorAll('.dock-item').forEach(i => {
+                    i.classList.remove('active');
+                });
+                
+                // Add active class to clicked item
+                this.classList.add('active');
+                
+                // Get section to scroll to
+                const targetSection = this.dataset.section;
+                const targetElement = document.getElementById(targetSection);
+                
+                // Scroll to section if it exists
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+        
+        // Hide dock when scrolling down, show when scrolling up
+        let lastScrollTop = 0;
+        const dock = document.querySelector('.dock-container');
+        
+        window.addEventListener('scroll', () => {
+            const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            
+            if (scrollTop > lastScrollTop && scrollTop > 200) {
+                // Scrolling down
+                dock.classList.add('dock-hidden');
+            } else {
+                // Scrolling up
+                dock.classList.remove('dock-hidden');
+            }
+            
+            lastScrollTop = scrollTop;
+        });
+
+        // Team Member Data
+        const teamMembers = [
+            {
+                id: 1,
+                name: "Sarah Johnson",
+                position: "Chief Executive Officer",
+                bio: "With over 15 years of industry experience, Sarah has led our company to new heights with her visionary leadership and strategic thinking. She began her career in marketing before transitioning to operations and eventually taking on the role of CEO. Under her guidance, the company has expanded into new markets and doubled its revenue. Sarah is known for her ability to inspire teams and create a culture of innovation and excellence. Her forward-thinking approach and commitment to sustainable business practices have positioned our company as an industry leader.",
+                color: "#1E5EAB",
+                accent: "#3a7fcf",
+                image: "executive-woman"
+            },
+            {
+                id: 2,
+                name: "Michael Chen",
+                position: "Chief Technology Officer",
+                bio: "Michael's innovative approach to technology has revolutionized our product development process and kept us at the cutting edge of the industry. With a background in quantum computing and artificial intelligence, he brings a unique perspective to solving complex technical challenges. His leadership has resulted in multiple patents and award-winning products. Michael is passionate about creating technology that makes a positive impact on people's lives. He leads our R&D team with a focus on both short-term solutions and long-term technological advancement.",
+                color: "#2a6fbd",
+                accent: "#4b90e0",
+                image: "tech-man"
+            },
+            {
+                id: 3,
+                name: "Elena Rodriguez",
+                position: "Creative Director",
+                bio: "Elena's creative vision has shaped our brand identity and helped us connect with audiences through compelling visual storytelling. Her background in fine arts and digital design gives her a versatile approach to creative challenges. She leads a team of designers who consistently produce award-winning work across multiple platforms. Elena believes that great design is both beautiful and functional, solving real problems while creating emotional connections. Her work has been recognized internationally and has helped establish our distinctive brand presence in a competitive market.",
+                color: "#174a87",
+                accent: "#2a6fbd",
+                image: "creative-woman"
+            },
+            {
+                id: 4,
+                name: "James Taylor",
+                position: "Operations Director",
+                bio: "James has streamlined our operations and improved efficiency across all departments with his methodical approach and attention to detail. His background in supply chain management and process optimization has been invaluable in scaling our operations while maintaining quality and customer satisfaction. James is committed to sustainable business practices and has implemented eco-friendly initiatives throughout our supply chain. His leadership has been crucial in maintaining operational excellence during periods of rapid growth.",
+                color: "#3a7fcf",
+                accent: "#5b9fe0",
+                image: "operations-man"
+            },
+            {
+                id: 5,
+                name: "Aisha Patel",
+                position: "Marketing Director",
+                bio: "Aisha's innovative marketing strategies have significantly expanded our market reach and strengthened our brand presence globally. Her expertise in digital marketing and consumer psychology has helped us connect with new audiences and build lasting customer relationships across diverse markets. Aisha is known for her data-driven approach combined with creative storytelling. She has pioneered several successful campaigns that have set new benchmarks in the industry and significantly contributed to our company's growth.",
+                color: "#2a6fbd",
+                accent: "#4b90e0",
+                image: "marketing-woman"
+            },
+            {
+                id: 6,
+                name: "Robert Kim",
+                position: "Financial Analyst",
+                bio: "Robert's financial expertise has been instrumental in optimizing our resource allocation and ensuring sustainable growth. His analytical skills and strategic thinking have helped us navigate complex financial challenges and identify new opportunities for investment and expansion. Robert combines traditional financial acumen with innovative approaches to funding and investment. His forecasting models have proven remarkably accurate, allowing the company to make confident decisions even in uncertain market conditions.",
+                color: "#174a87",
+                accent: "#2a6fbd",
+                image: "finance-man"
+            }
+        ];
+        
+        // Load More Team Members Button
+        document.getElementById('loadMoreBtn').addEventListener('click', function() {
+            const teamGrid = document.getElementById('teamGrid');
+            
+            // Add new members to the grid
+            const newMembers = [
+                {
+                    id: 4,
+                    name: 'James Taylor',
+                    position: 'Operations Director',
+                    bio: 'James has streamlined our operations and improved efficiency across all departments with his methodical approach and attention to detail.',
+                    skills: ['Operations', 'Management'],
+                    image: 'operations-man'
+                },
+                {
+                    id: 5,
+                    name: 'Aisha Patel',
+                    position: 'Marketing Director',
+                    bio: 'Aisha\'s innovative marketing strategies have significantly expanded our market reach and strengthened our brand presence globally.',
+                    skills: ['Marketing', 'Strategy'],
+                    image: 'marketing-woman'
+                },
+                {
+                    id: 6,
+                    name: 'Robert Kim',
+                    position: 'Financial Analyst',
+                    bio: 'Robert\'s financial expertise has been instrumental in optimizing our resource allocation and ensuring sustainable growth.',
+                    skills: ['Finance', 'Analysis'],
+                    image: 'finance-man'
+                }
+            ];
+            
+            // Add new members to the grid
+            newMembers.forEach((member, index) => {
+                const memberCard = document.createElement('div');
+                memberCard.className = 'team-card bg-white rounded-xl overflow-hidden shadow-lg animate-fade-in';
+                memberCard.setAttribute('data-member-id', member.id);
+                memberCard.style.transitionDelay = `0.${index + 3}s`;
+                
+                const colorGradId = `colorGrad${member.id}`;
+                const imgId = `img${member.id}`;
+                
+                memberCard.innerHTML = `
+                    <div class="h-64 relative overflow-hidden">
+                        <svg class="team-card-image" viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+                            <defs>
+                                <pattern id="${imgId}" patternUnits="userSpaceOnUse" width="400" height="300">
+                                    <image href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0MDAgMzAwIj48cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgZmlsbD0iI2YwZjBmMCIvPjxjaXJjbGUgY3g9IjIwMCIgY3k9IjEwMCIgcj0iNzAiIGZpbGw9IiNkZGRkZGQiLz48Y2lyY2xlIGN4PSIyMDAiIGN5PSI4NSIgcj0iNDAiIGZpbGw9IiNmMGYwZjAiLz48ZWxsaXBzZSBjeD0iMjAwIiBjeT0iMjIwIiByeD0iMTIwIiByeT0iODAiIGZpbGw9IiNkZGRkZGQiLz48cmVjdCB4PSIxNzAiIHk9IjEzMCIgd2lkdGg9IjYwIiBoZWlnaHQ9IjEwMCIgZmlsbD0iI2RkZGRkZCIvPjxjaXJjbGUgY3g9IjE3MCIgY3k9IjgwIiByPSI4IiBmaWxsPSIjNTU1Ii8+PGNpcmNsZSBjeD0iMjMwIiBjeT0iODAiIHI9IjgiIGZpbGw9IiM1NTUiLz48cGF0aCBkPSJNMTcwLDExMCBRMjAwLDEzMCAyMzAsMTEwIiBzdHJva2U9IiM1NTUiIHN0cm9rZS13aWR0aD0iMyIgZmlsbD0ibm9uZSIvPjwvc3ZnPg==" x="0" y="0" width="400" height="300" />
+                                </pattern>
+                                <linearGradient id="${colorGradId}" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" style="stop-color:#1E5EAB;stop-opacity:1" />
+                                    <stop offset="100%" style="stop-color:#3a7fcf;stop-opacity:1" />
+                                </linearGradient>
+                            </defs>
+                            <rect width="400" height="300" fill="url(#${imgId})" />
+                            <rect width="400" height="300" fill="url(#${colorGradId})" style="mix-blend-mode: color" />
+                        </svg>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-2xl font-bold text-gray-800 mb-2">${member.name}</h3>
+                        <p class="text-[#1E5EAB] font-medium mb-4">${member.position}</p>
+                        <p class="text-gray-600 mb-6">${member.bio}</p>
+                        <div class="flex space-x-3">
+                            <span class="px-3 py-1 bg-blue-100 text-[#1E5EAB] rounded-full text-sm">${member.skills[0]}</span>
+                            <span class="px-3 py-1 bg-blue-100 text-[#1E5EAB] rounded-full text-sm">${member.skills[1]}</span>
+                        </div>
+                    </div>
+                `;
+                
+                teamGrid.appendChild(memberCard);
+                setTimeout(() => {
+                    memberCard.classList.add('visible');
+                }, 100);
+                
+                // Add click event to new cards
+                memberCard.addEventListener('click', function() {
+                    const memberId = parseInt(this.getAttribute('data-member-id'));
+                    openMemberModal(memberId);
+                });
+            });
+            
+            // Hide the button after clicking
+            this.style.display = 'none';
+        });
+        
+        // Modal functionality
+        const modal = document.getElementById('teamModal');
+        const closeModal = document.getElementById('closeModal');
+        const memberImage = document.getElementById('memberImage');
+        const memberInfo = document.getElementById('memberInfo');
+        
+        // Add click event to team cards
+        document.querySelectorAll('.team-card').forEach(card => {
+            card.addEventListener('click', function() {
+                const memberId = parseInt(this.getAttribute('data-member-id'));
+                openMemberModal(memberId);
+            });
+        });
+        
+        // Close modal
+        closeModal.addEventListener('click', function() {
+            modal.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        });
+        
+        // Close modal when clicking outside
+        modal.addEventListener('click', function(e) {
+            if (e.target === modal) {
+                modal.classList.remove('active');
+                document.body.style.overflow = 'auto';
+            }
+        });
+        
+        // Open member modal
+        function openMemberModal(memberId) {
+            const member = teamMembers.find(m => m.id === memberId);
+            if (!member) return;
+            
+            // Create full-size member image
+            memberImage.innerHTML = createFullMemberImage(member);
+            
+            // Create simplified member info content - only name, position and bio
+            memberInfo.innerHTML = `
+                <h2 class="text-3xl font-bold text-gray-800 mb-2">${member.name}</h2>
+                <p class="text-xl text-[#1E5EAB] font-medium mb-6">${member.position}</p>
+                
+                <div class="mb-8">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-3">About</h3>
+                    <p class="text-gray-600">${member.bio}</p>
+                </div>
+            `;
+            
+            // Show modal
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+        
+        // Create full-size member image
+        function createFullMemberImage(member) {
+            const mainColor = member.color || '#1E5EAB';
+            const accentColor = member.accent || '#3a7fcf';
+            
+            // Create a more detailed SVG for the member image
+            let personSvg;
+            
+            // Base SVG for all member images (grayscale by default)
+            personSvg = `
+            <div class="member-image-container">
+                <svg class="member-image" viewBox="0 0 600 800" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+                    <defs>
+                        <pattern id="personImg${member.id}" patternUnits="userSpaceOnUse" width="600" height="800">
+                            <image href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2MDAgODAwIj48cmVjdCB3aWR0aD0iNjAwIiBoZWlnaHQ9IjgwMCIgZmlsbD0iI2YwZjBmMCIvPjxjaXJjbGUgY3g9IjMwMCIgY3k9IjIwMCIgcj0iMTIwIiBmaWxsPSIjZGRkZGRkIi8+PGNpcmNsZSBjeD0iMzAwIiBjeT0iMTgwIiByPSI4MCIgZmlsbD0iI2YwZjBmMCIvPjxlbGxpcHNlIGN4PSIzMDAiIGN5PSI1MDAiIHJ4PSIyMDAiIHJ5PSIyNTAiIGZpbGw9IiNkZGRkZGQiLz48cmVjdCB4PSIyNTAiIHk9IjI4MCIgd2lkdGg9IjEwMCIgaGVpZ2h0PSIyNTAiIGZpbGw9IiNkZGRkZGQiLz48Y2lyY2xlIGN4PSIyNTAiIGN5PSIxNzAiIHI9IjE1IiBmaWxsPSIjNTU1Ii8+PGNpcmNsZSBjeD0iMzUwIiBjeT0iMTcwIiByPSIxNSIgZmlsbD0iIzU1NSIvPjxwYXRoIGQ9Ik0yNTAsMjMwIFEzMDAsMjcwIDM1MCwyMzAiIHN0cm9rZT0iIzU1NSIgc3Ryb2tlLXdpZHRoPSI1IiBmaWxsPSJub25lIi8+PHBhdGggZD0iTTEwMCw0MDAgUTMwMCwzMDAgNTAwLDQwMCIgc3Ryb2tlPSIjZGRkZGRkIiBzdHJva2Utd2lkdGg9IjIwIiBmaWxsPSJub25lIi8+PHBhdGggZD0iTTEwMCw2MDAgUTMwMCw1MDAgNTAwLDYwMCIgc3Ryb2tlPSIjZGRkZGRkIiBzdHJva2Utd2lkdGg9IjIwIiBmaWxsPSJub25lIi8+PC9zdmc+" x="0" y="0" width="600" height="800" />
+                        </pattern>
+                        <linearGradient id="colorOverlay${member.id}" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:${mainColor};stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:${accentColor};stop-opacity:1" />
+                        </linearGradient>
+                    </defs>
+                    
+                    <!-- Background pattern -->
+                    <rect width="600" height="800" fill="url(#personImg${member.id})" />
+                    
+                    <!-- Color overlay that will show on hover -->
+                    <rect width="600" height="800" fill="url(#colorOverlay${member.id})" style="mix-blend-mode: color" />
+                    
+                    <!-- Name banner at bottom -->
+                    <rect x="0" y="700" width="600" height="100" fill="rgba(0,0,0,0.5)" />
+                    <text x="300" y="750" font-family="Arial" font-size="30" font-weight="bold" text-anchor="middle" fill="white">
+                        ${member.name}
+                    </text>
+                    <text x="300" y="780" font-family="Arial" font-size="20" text-anchor="middle" fill="white">
+                        ${member.position}
+                    </text>
+                </svg>
+            </div>`;
+            
+            return personSvg;
+        }
+        
+        // Animation on scroll
+        const animatedElements = document.querySelectorAll('.animate-fade-in');
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1 });
+        
+        animatedElements.forEach(element => {
+            observer.observe(element);
+        });
+    </script>
+</body>
+</html>
